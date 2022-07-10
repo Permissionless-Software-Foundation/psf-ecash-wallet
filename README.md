@@ -1,6 +1,6 @@
-# psf-bch-wallet
+# psf-ecash-wallet
 
-This is a command-line (CLI) app for working with the Bitcoin Cash (BCH) blockchain, and SLP tokens.
+This is a command-line (CLI) app for working with the eCash (XEC) blockchain, and SLP (eToken) tokens.
 
 This app connects to a [ipfs-bch-wallet-service](https://github.com/Permissionless-Software-Foundation/ipfs-bch-wallet-service) over [IPFS](https://ipfs.io), using the [ipfs-coord](https://github.com/Permissionless-Software-Foundation/ipfs-coord) library. This app uses the [oclif CLI framework](https://oclif.io/).
 
