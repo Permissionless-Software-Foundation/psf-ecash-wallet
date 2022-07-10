@@ -43,6 +43,8 @@ class WalletAddrs extends Command {
       // console.log('walletData: ', walletData)
 
       console.log(' ')
+      console.log(`eCash address: ${walletData.eCashAddress}`)
+      console.log(`eToken address: ${walletData.eTokenAddress}`)
       console.log(`Cash Address: ${walletData.cashAddress}`)
       console.log(`SLP Address: ${walletData.slpAddress}`)
       console.log(`Legacy Address: ${walletData.legacyAddress}`)
