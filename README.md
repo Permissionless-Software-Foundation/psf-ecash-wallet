@@ -596,5 +596,7 @@ DESCRIPTION
   Either a WIF or a mnemonic must be specified.
 ```
 
+a
+
 _See code: [src/commands/wallet-sweep.js](https://github.com/Permissionless-Software-Foundation/psf-bch-wallet/blob/vv2.14.2/src/commands/wallet-sweep.js)_
 <!-- commandsstop -->
