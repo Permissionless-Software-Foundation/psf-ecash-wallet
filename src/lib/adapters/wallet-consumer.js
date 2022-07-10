@@ -2,8 +2,8 @@
   This library interacts with the ipfs-bch-wallet-consumer REST API:
   https://github.com/Permissionless-Software-Foundation/ipfs-bch-wallet-consumer
 
-  This library is injected into minimal-slp-wallet when the library is initialized.
-  It provides the interface needed by minimal-slp-wallet to interact with the
+  This library is injected into minimal-ecash-wallet when the library is initialized.
+  It provides the interface needed by minimal-ecash-wallet to interact with the
   ipfs-bch-wallet-consumer REST API.
 */
 

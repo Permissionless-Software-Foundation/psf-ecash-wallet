@@ -1,5 +1,5 @@
 /*
-  A mock file for minimal-slp-wallet
+  A mock file for minimal-ecash-wallet
 */
 
 const BCHJS = require('@psf/bch-js')

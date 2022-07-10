@@ -6,7 +6,7 @@
 const fs = require('fs').promises
 const BCHJS = require('@psf/bch-js')
 const Conf = require('conf')
-const BchWallet = require('minimal-slp-wallet/index')
+const BchWallet = require('minimal-ecash-wallet/index')
 const MsgLib = require('bch-message-lib/index')
 
 let _this // Global variable points at instance of this Class.
@@ -145,7 +145,7 @@ class WalletUtil {
   }
 
   // Takes the wallet filename as input and returns an instance of
-  // minimal-slp-wallet.
+  // minimal-ecash-wallet.
   async instanceWallet (walletName) {
     try {
       // Input validation
@@ -169,7 +169,7 @@ class WalletUtil {
         this.advancedConfig.noUpdate = true
       }
 
-      // Configure the minimal-slp-wallet library.
+      // Configure the minimal-ecash-wallet library.
       this.advancedConfig.restURL = server.restURL
       const bchWallet = new this.BchWallet(
         walletData.mnemonic,
@@ -187,10 +187,10 @@ class WalletUtil {
     }
   }
 
-  // Instantiate the bch-message-lib library with an instance of minimal-slp-wallet.
+  // Instantiate the bch-message-lib library with an instance of minimal-ecash-wallet.
   instanceMsgLib (wallet) {
     if (!wallet) {
-      throw new Error('Must pass instance of minimal-slp-wallet.')
+      throw new Error('Must pass instance of minimal-ecash-wallet.')
     }
 
     const msgLib = new this.MsgLib({ wallet })

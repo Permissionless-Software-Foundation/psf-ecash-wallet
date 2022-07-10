@@ -5,7 +5,7 @@
 */
 
 // Public NPM libraries
-const BchWallet = require('minimal-slp-wallet/index')
+const BchWallet = require('minimal-ecash-wallet/index')
 const Conf = require('conf')
 const BchTokenSweep = require('bch-token-sweep/index')
 const { Command, flags } = require('@oclif/command')
@@ -181,7 +181,7 @@ class WalletSweep extends Command {
     }
   }
 
-  // Instantiate the minimal-slp-wallet and get the WIF for the receiving wallet.
+  // Instantiate the minimal-ecash-wallet and get the WIF for the receiving wallet.
   async getReceiverWif (flags) {
     try {
       const filename = `${__dirname.toString()}/../../.wallets/${
@@ -192,7 +192,7 @@ class WalletSweep extends Command {
       const walletJSON = require(filename)
       const walletData = walletJSON.wallet
 
-      // Configure and instantiate the minimal-slp-wallet library.
+      // Configure and instantiate the minimal-ecash-wallet library.
       const advancedConfig = this.walletUtil.getRestServer()
       this.bchWallet = new this.BchWallet(walletData.mnemonic, advancedConfig)
 
