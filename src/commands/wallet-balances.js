@@ -119,22 +119,13 @@ class WalletBalances extends Command {
   // Take the updated wallet data and display it on the screen.
   displayBalance (walletData, flags = {}) {
     try {
-      // Loop through each BCH UTXO and add up the balance.
-      // let bchBalance = 0
-      // for (let i = 0; i < walletData.utxos.utxoStore.bchUtxos.length; i++) {
-      //   const thisUtxo = walletData.utxos.utxoStore.bchUtxos[i]
-      //
-      //   bchBalance += thisUtxo.value
-      // }
       // const coinBalance = walletData.bchjs.BitcoinCash.toBitcoinCash(bchBalance)
       console.log(
         `BCH balance: ${walletData.satBalance} satoshis or ${walletData.bchBalance} BCH`
       )
 
-      // console.log(
-      //   'walletData.utxos.utxoStore.slpUtxos.type1.tokens: ',
-      //   walletData.utxos.utxoStore.slpUtxos.type1.tokens
-      // )
+      walletData.eCashBalance = walletData.satBalance / 100
+      console.log(`eCash balance: ${walletData.eCashBalance} XEC`)
 
       // Combine token UTXOs
       const tokenUtxos = walletData.utxos.utxoStore.slpUtxos.type1.tokens.concat(
