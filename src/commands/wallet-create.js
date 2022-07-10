@@ -8,7 +8,7 @@
 
 // Public NPM libraries
 // const BCHJS = require('@psf/bch-js')
-const BchWallet = require('minimal-slp-wallet/index')
+const BchWallet = require('minimal-ecash-wallet/index')
 const Conf = require('conf')
 
 // Local libraries
@@ -61,7 +61,7 @@ class WalletCreate extends Command {
 
       if (!desc) desc = ''
 
-      // Configure the minimal-slp-wallet library to use the JSON RPC over IPFS.
+      // Configure the minimal-ecash-wallet library to use the JSON RPC over IPFS.
       const advancedConfig = this.walletUtil.getRestServer()
       advancedConfig.noUpdate = true
 

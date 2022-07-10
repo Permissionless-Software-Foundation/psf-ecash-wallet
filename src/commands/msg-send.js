@@ -72,7 +72,7 @@ class MsgSend extends Command {
   async instanceLibs (flags) {
     const { name } = flags
 
-    // Instantiate minimal-slp-wallet.
+    // Instantiate minimal-ecash-wallet.
     this.bchWallet = await this.walletUtil.instanceWallet(name)
     const walletData = this.bchWallet.walletInfo
 

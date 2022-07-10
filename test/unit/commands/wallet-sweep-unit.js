@@ -7,7 +7,7 @@
 // Public npm libraries
 const assert = require('chai').assert
 const sinon = require('sinon')
-const BchWallet = require('minimal-slp-wallet/index')
+const BchWallet = require('minimal-ecash-wallet/index')
 
 // Local libraries
 const WalletSweep = require('../../../src/commands/wallet-sweep')
@@ -30,7 +30,7 @@ describe('#wallet-sweep', () => {
     // Create a test wallet
     await walletCreate.createWallet(filename)
 
-    // Initialize minimal-slp-wallet
+    // Initialize minimal-ecash-wallet
     const advancedConfig = {
       interface: 'consumer-api',
       noUpdate: true

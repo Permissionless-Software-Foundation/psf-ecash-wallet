@@ -122,7 +122,7 @@ describe('#Wallet-Util', () => {
     const walletName = 'test123'
 
     it('should generate an instance of the wallet', async () => {
-      // Mock minimal-slp-wallet
+      // Mock minimal-ecash-wallet
       uut.BchWallet = class BchWallet {
         async walletInfoPromise () {
           return true
@@ -144,7 +144,7 @@ describe('#Wallet-Util', () => {
 
     it('should catch, log, and throw errors', async () => {
       try {
-        // Mock minimal-slp-wallet
+        // Mock minimal-ecash-wallet
         uut.BchWallet = class BchWallet {
           constructor () {
             throw new Error('test error')
@@ -200,7 +200,7 @@ describe('#Wallet-Util', () => {
 
   describe('#broadcastTx', () => {
     it('should broadcast a hex tx', async () => {
-      // Mock minimal-slp-wallet
+      // Mock minimal-ecash-wallet
       const Wallet = class BchWallet {
         constructor () {
           this.ar = {

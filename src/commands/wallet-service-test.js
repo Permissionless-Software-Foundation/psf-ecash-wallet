@@ -7,7 +7,7 @@
 'use strict'
 
 // Public NPM libraries
-const BchWallet = require('minimal-slp-wallet/index')
+const BchWallet = require('minimal-ecash-wallet/index')
 const Conf = require('conf')
 
 // Local libraries
@@ -70,7 +70,7 @@ class WalletServiceTest extends Command {
   // Initialize the wallet library.
   async initWallet () {
     try {
-      // Instantiate the minimal-slp-wallet library.
+      // Instantiate the minimal-ecash-wallet library.
       const advancedConfig = this.walletUtil.getRestServer()
       this.bchWallet = new this.BchWallet(undefined, advancedConfig)
 
