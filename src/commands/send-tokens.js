@@ -38,7 +38,7 @@ class SendTokens extends Command {
       console.log('txid: ', txid)
 
       console.log('\nView this transaction on a block explorer:')
-      console.log(`https://slp-explorer.salemkode.com/tx/${txid}`)
+      console.log(`https://explorer.be.cash/tx/${txid}`)
 
       return txid
     } catch (err) {
