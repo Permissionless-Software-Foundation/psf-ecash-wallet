@@ -51,7 +51,7 @@ class SendBch extends Command {
 
       return txid
     } catch (err) {
-      console.log('Error in send-bch.js/run(): ', err)
+      console.log('Error in send-ecash.js/run(): ', err)
 
       return 0
     }
