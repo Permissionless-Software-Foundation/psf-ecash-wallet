@@ -22,7 +22,7 @@ class WalletUtil {
 
     // Variables that can be controlled externally.
     this.advancedConfig = {
-      interface: 'consumer-api'
+      interface: 'rest-api'
     }
 
     _this = this
