@@ -168,8 +168,8 @@ describe('#Wallet-Util', () => {
 
       const result = uut.getRestServer()
 
-      assert.equal(result.restURL, 'https://free-bch.fullstack.cash')
-      assert.equal(result.interface, 'consumer-api')
+      assert.equal(result.restURL, 'https://abc.fullstack.cash/v5/')
+      assert.equal(result.interface, 'rest-api')
     })
 
     it('should return saved values', () => {

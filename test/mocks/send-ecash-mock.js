@@ -1,4 +1,4 @@
-// Mocks for send-bch command
+// Mocks for send-ecash command
 const BCHJS = require('@psf/bch-js')
 
 const getBalancesResult = {

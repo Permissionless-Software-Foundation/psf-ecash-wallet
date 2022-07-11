@@ -1,5 +1,5 @@
 /*
-  Unit tests for the send-bch command.
+  Unit tests for the send-ecash command.
 */
 
 'use strict'
@@ -8,14 +8,14 @@ const assert = require('chai').assert
 const sinon = require('sinon')
 const fs = require('fs').promises
 
-const SendBch = require('../../../src/commands/send-bch')
-const SendBCHMock = require('../../mocks/send-bch-mock')
+const SendBch = require('../../../src/commands/send-ecash')
+const SendBCHMock = require('../../mocks/send-ecash-mock')
 const WalletCreate = require('../../../src/commands/wallet-create')
 const walletCreate = new WalletCreate()
 
 const filename = `${__dirname.toString()}/../../../.wallets/test123.json`
 
-describe('send-bch', () => {
+describe('send-ecash', () => {
   let uut
   let sandbox
 

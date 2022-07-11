@@ -68,12 +68,16 @@ class WalletBalances extends Command {
       const walletData = walletJSON.wallet
 
       const advancedConfig = this.walletUtil.getRestServer()
+      // console.log('advancedConfig: ', advancedConfig)
+
       this.bchWallet = new this.BchWallet(walletData.mnemonic, advancedConfig)
       // console.log('bchWallet: ', this.bchWallet)
 
       // Wait for the wallet to initialize and retrieve UTXO data from the
       // blockchain.
       await this.bchWallet.walletInfoPromise
+
+      // console.log(`this.bchWallet.walletInfo: ${JSON.stringify(this.bchWallet.walletInfo, null, 2)}`)
 
       // If UTXOs fail to update, try one more time.
       if (!this.bchWallet.utxos.utxoStore) {
@@ -119,22 +123,15 @@ class WalletBalances extends Command {
   // Take the updated wallet data and display it on the screen.
   displayBalance (walletData, flags = {}) {
     try {
-      // Loop through each BCH UTXO and add up the balance.
-      // let bchBalance = 0
-      // for (let i = 0; i < walletData.utxos.utxoStore.bchUtxos.length; i++) {
-      //   const thisUtxo = walletData.utxos.utxoStore.bchUtxos[i]
-      //
-      //   bchBalance += thisUtxo.value
-      // }
       // const coinBalance = walletData.bchjs.BitcoinCash.toBitcoinCash(bchBalance)
       console.log(
         `BCH balance: ${walletData.satBalance} satoshis or ${walletData.bchBalance} BCH`
       )
 
-      // console.log(
-      //   'walletData.utxos.utxoStore.slpUtxos.type1.tokens: ',
-      //   walletData.utxos.utxoStore.slpUtxos.type1.tokens
-      // )
+      walletData.eCashBalance = walletData.satBalance / 100
+      console.log(`eCash balance: ${walletData.eCashBalance} XEC`)
+
+      // console.log('walletData.utxos.utxoStore: ', walletData.utxos.utxoStore)
 
       // Combine token UTXOs
       const tokenUtxos = walletData.utxos.utxoStore.slpUtxos.type1.tokens.concat(

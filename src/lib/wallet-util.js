@@ -22,7 +22,7 @@ class WalletUtil {
 
     // Variables that can be controlled externally.
     this.advancedConfig = {
-      interface: 'consumer-api'
+      interface: 'rest-api'
     }
 
     _this = this
@@ -107,13 +107,14 @@ class WalletUtil {
       }
 
       if (!outObj.restURL) {
-        outObj.restURL = 'https://free-bch.fullstack.cash'
+        outObj.restURL = 'https://abc.fullstack.cash/v5/'
 
         this.conf.set('restURL', outObj.restURL)
       }
 
       if (!outObj.interface) {
-        outObj.interface = 'consumer-api'
+        // outObj.interface = 'consumer-api'
+        outObj.interface = 'rest-api'
 
         this.conf.set('interface', outObj.interface)
       }

@@ -2,13 +2,9 @@
 
 This is a command-line (CLI) app for working with the eCash (XEC) blockchain, and SLP (eToken) tokens.
 
-This app connects to a [ipfs-bch-wallet-service](https://github.com/Permissionless-Software-Foundation/ipfs-bch-wallet-service) over [IPFS](https://ipfs.io), using the [ipfs-coord](https://github.com/Permissionless-Software-Foundation/ipfs-coord) library. This app uses the [oclif CLI framework](https://oclif.io/).
+This app is forked from [psf-bch-wallet](https://github.com/Permissionless-Software-Foundation/psf-bch-wallet). It's been modified to support the `ecash` address prefix, and it connects to the XEC blockchain through FullStack.cash. Currently in only supports the web2 infrastructure described at [CashStack.info](https://cashstack.info) (not web 3).
 
-This app is intended for developers who want to work with the BCH blockchain. It's an integral part of the [Cash Stack](https://cashstack.info).
-
-## How-To Videos
-- [Part 1: How to Install and Use](https://www.youtube.com/watch?v=nsExL0Hb7bQ)
-- [Part 2: Configuration](https://www.youtube.com/watch?v=Bu8KqUJSvvc)
+If you need help or guidence while using this software, reach out to the [Community Support Telegram Channel](https://t.me/bch_js_toolkit).
 
 ## Install
 
@@ -17,35 +13,13 @@ This app is intended for developers who want to work with the BCH blockchain. It
 - `./bin/run help` to see a list of available commands.
 - `./bin/run wallet-create` to create a wallet. Wallet files are stored in the `.wallets` directory.
 
-## Configuration
-
-By default, this app uses [free-bch.fullstack.cash](https://free-bch.fullstack.cash) as its back end service for working with the BCH blockchain. That back-end service is simply a copy of [ipfs-bch-wallet-consumer](https://github.com/Permissionless-Software-Foundation/ipfs-bch-wallet-consumer). By running your own copy of ipfs-bch-wallet-consumer, you can have greater reliability and can use this app to switch between different [global back ends](https://bafybeie3w6ykd3ur6b6ytxoopi6p7vipmyvdyq7s2aw5ngsenhtjvyp4d4.ipfs.dweb.link/blog/realizing-the-web-3-cash-stack). If `free-bch.fullstack.cash` goes down for some reason, running your own instance of `ipfs-bch-wallet-consumer` allows you to easily switch to any functional back end on the internet.
-
-Switch to a local instance of `ipfs-bch-wallet-consumer`:
-
-- `./bin/run conf -k restURL -v http://localhost:5005`
-- `./bin/run conf -k interface -v consumer-api`
-
-Switch back to [free-bch.fullstack.cash](https://free-bch.fullstack.cash):
-
-- `./bin/run conf -k restURL -v https://free-bch.fullstack.cash`
-
-Switch to using the web2 infrastructure with [FullStack.cash](https://fullstack.cash):
-- `./bin/run conf -k restURL -v http://api.fullstack.cash/v5/`
-- `./bin/run conf -k interface -v rest-api`
-
-Explore the other configuration settings:
-
-- `./bin/run conf`
-
 ## License
 
 [MIT](./LICENSE.md)
 
 ## Credit
 
-- [js-ipfs](https://www.npmjs.com/package/ipfs) - The IPFS node software.
-- [ipfs-coord](https://github.com/Permissionless-Software-Foundation/ipfs-coord) - IPFS subnet coordination library.
+- [minimal-ecash-wallet](https://github.com/Permissionless-Software-Foundation/minimal-ecash-wallet)
 - [bch-js](https://github.com/Permissionless-Software-Foundation/bch-js) - BCH toolkit.
 - [oclif](https://oclif.io/) - CLI framework.
 - [conf-cli](https://github.com/natzcam/conf-cli) - oclif config plugin.
