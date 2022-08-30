@@ -141,6 +141,17 @@ describe('#p2wdb-write', () => {
         assert.include(err.message, 'Cannot read')
       }
     })
+
+    it('should write data to the P2WDB when paying with BCH', async () => {
+      // Mock dependencies
+      uut.write = {
+        postEntry: () => { return { hash: { hash: 'fake-hash' } } }
+      }
+
+      const result = await uut.writeData({})
+
+      assert.equal(result, 'fake-hash')
+    })
   })
 
   describe('#run()', () => {
