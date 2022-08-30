@@ -83,7 +83,14 @@ class P2WDBWrite extends Command {
       const result = await this.write.postEntry(flags.data, flags.appId)
       // console.log('result: ', result)
 
-      return result.hash
+      let hash = ''
+      if (result.hash.hash) {
+        hash = result.hash.hash
+      } else {
+        hash = result.hash
+      }
+
+      return hash
     } catch (err) {
       console.error('Error in writeData(): ', err)
       throw err
