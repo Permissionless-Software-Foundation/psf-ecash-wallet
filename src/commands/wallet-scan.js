@@ -205,7 +205,7 @@ class ScanMnemonic extends Command {
         balance = balanceData
       }
 
-      return { hasHistory: hasHistory, balance: balance }
+      return { hasHistory, balance }
     } catch (err) {
       console.log('Error in addrTxHistory()')
       throw err
