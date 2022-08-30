@@ -74,6 +74,7 @@ class WalletBalances extends Command {
       // Wait for the wallet to initialize and retrieve UTXO data from the
       // blockchain.
       await this.bchWallet.walletInfoPromise
+      await this.bchWallet.initialize()
 
       // If UTXOs fail to update, try one more time.
       if (!this.bchWallet.utxos.utxoStore) {
