@@ -180,7 +180,7 @@ describe('wallet-balances', () => {
         name: 'test123'
       }
       // Mock methods that will be tested elsewhere.
-      sandbox.stub(uut, 'parse').returns({ flags: flags })
+      sandbox.stub(uut, 'parse').returns({ flags })
 
       const result = await uut.run()
 

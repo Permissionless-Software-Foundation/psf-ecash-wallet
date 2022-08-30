@@ -80,7 +80,7 @@ describe('wallet-addrs', () => {
       const flags = {
         name: 'test123'
       }
-      sandbox.stub(uut, 'parse').returns({ flags: flags })
+      sandbox.stub(uut, 'parse').returns({ flags })
 
       const result = await uut.run()
       // console.log('result', result)

@@ -108,7 +108,7 @@ describe('wallet-create', () => {
         name: 'test123'
       }
       // Mock methods that will be tested elsewhere.
-      sandbox.stub(uut, 'parse').returns({ flags: flags })
+      sandbox.stub(uut, 'parse').returns({ flags })
 
       const walletData = await uut.run()
       // console.log('walletData: ', walletData)
@@ -152,7 +152,7 @@ describe('wallet-create', () => {
         description: 'test'
       }
       // Mock methods that will be tested elsewhere.
-      sandbox.stub(uut, 'parse').returns({ flags: flags })
+      sandbox.stub(uut, 'parse').returns({ flags })
 
       const walletData = await uut.run()
 

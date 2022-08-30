@@ -237,7 +237,7 @@ describe('#wallet-scan', () => {
         mnemonic: 'assist field wrist ridge violin visa mango minor vibrant this scorpion asthma'
       }
       // Mock methods that will be tested elsewhere.
-      sandbox.stub(uut, 'parse').returns({ flags: flags })
+      sandbox.stub(uut, 'parse').returns({ flags })
 
       const result = await uut.run()
 

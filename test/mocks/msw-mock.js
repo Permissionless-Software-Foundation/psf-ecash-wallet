@@ -122,6 +122,10 @@ class BchWallet {
   async getUtxos () {
     return {}
   }
+
+  async initialize () {
+    return true
+  }
 }
 
 module.exports = BchWallet
