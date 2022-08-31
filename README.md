@@ -81,6 +81,7 @@ In the commands below, replace `psf-bch-wallet` with `./bin/run`.
 * [`psf-bch-wallet msg-send`](#psf-bch-wallet-msg-send)
 * [`psf-bch-wallet msg-sign`](#psf-bch-wallet-msg-sign)
 * [`psf-bch-wallet msg-verify`](#psf-bch-wallet-msg-verify)
+* [`psf-bch-wallet p2wdb-pin`](#psf-bch-wallet-p2wdb-pin)
 * [`psf-bch-wallet p2wdb-read`](#psf-bch-wallet-p2wdb-read)
 * [`psf-bch-wallet p2wdb-write`](#psf-bch-wallet-p2wdb-write)
 * [`psf-bch-wallet send-bch`](#psf-bch-wallet-send-bch)
@@ -263,6 +264,27 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/msg-verify.js](https://github.com/Permissionless-Software-Foundation/psf-bch-wallet/blob/vv2.14.2/src/commands/msg-verify.js)_
+
+## `psf-bch-wallet p2wdb-pin`
+
+Pin an IPFS CID using the P2WDB pinning service
+
+```
+USAGE
+  $ psf-bch-wallet p2wdb-pin
+
+OPTIONS
+  -c, --cid=cid    IPFS CID to pin
+  -n, --name=name  Name of wallet
+
+DESCRIPTION
+  This command uses the p2wdb npm library to pin an IPFS CID using the P2WDB
+  pinning service.
+
+  Note: Currently only files 1MB or less are supported.
+```
+
+_See code: [src/commands/p2wdb-pin.js](https://github.com/Permissionless-Software-Foundation/psf-bch-wallet/blob/vv2.14.2/src/commands/p2wdb-pin.js)_
 
 ## `psf-bch-wallet p2wdb-read`
 
