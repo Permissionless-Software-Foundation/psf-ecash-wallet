@@ -10,15 +10,15 @@ const fs = require('fs').promises
 // Local libraries
 const TokenCreateNft = require('../../../src/commands/token-create-nft')
 const WalletCreate = require('../../../src/commands/wallet-create')
-// const MockWallet = require('../../mocks/msw-mock')
+const MockWallet = require('../../mocks/msw-mock')
 
 const walletCreate = new WalletCreate()
 const filename = `${__dirname.toString()}/../../../.wallets/test123.json`
 
-describe('#token-create-group', () => {
+describe('#token-create-nft', () => {
   let uut
   let sandbox
-  // let mockWallet
+  let mockWallet
 
   before(async () => {
     await walletCreate.createWallet(filename)
@@ -28,7 +28,7 @@ describe('#token-create-group', () => {
     sandbox = sinon.createSandbox()
 
     uut = new TokenCreateNft()
-    // mockWallet = new MockWallet()
+    mockWallet = new MockWallet()
   })
 
   afterEach(() => {
@@ -117,6 +117,9 @@ describe('#token-create-group', () => {
 
   describe('#openWallet', () => {
     it('should return an instance of the wallet', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       const flags = {
         walletName: 'test123'
       }
@@ -124,7 +127,7 @@ describe('#token-create-group', () => {
       const result = await uut.openWallet(flags)
       // console.log('result: ', result)
 
-      assert.property(result, 'advancedOptions')
+      assert.property(result, 'walletInfoPromise')
     })
   })
 
@@ -149,6 +152,9 @@ describe('#token-create-group', () => {
         ticker: 'TST',
         tokenId: '227354c9827f4e3c9ce24dd9197b314f7da8a2224f4874ca11104c8fdc58f684'
       }
+
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
       // Instantiate the wallet and bch-js
       await uut.openWallet(flags)
@@ -182,6 +188,9 @@ describe('#token-create-group', () => {
         const flags = {
           walletName: 'test123'
         }
+
+        // Mock dependencies and force desired code path
+        sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
         // Instantiate the wallet and bch-js
         await uut.openWallet(flags)
@@ -220,6 +229,9 @@ describe('#token-create-group', () => {
         tokenId: '227354c9827f4e3c9ce24dd9197b314f7da8a2224f4874ca11104c8fdc58f684'
       }
 
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       // Instantiate the wallet and bch-js
       await uut.openWallet(flags)
 
@@ -255,6 +267,9 @@ describe('#token-create-group', () => {
           ticker: 'TST',
           tokenId: '227354c9827f4e3c9ce24dd9197b314f7da8a2224f4874ca11104c8fdc58f684'
         }
+
+        // Mock dependencies and force desired code path
+        sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
         // Instantiate the wallet and bch-js
         await uut.openWallet(flags)
@@ -311,6 +326,7 @@ describe('#token-create-group', () => {
       })
       sandbox.stub(uut, 'generateTokenTx').resolves('fake-hex')
       sandbox.stub(uut.walletUtil, 'broadcastTx').resolves('fake-txid')
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
       const result = await uut.run()
 

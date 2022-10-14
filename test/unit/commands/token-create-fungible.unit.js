@@ -10,7 +10,7 @@ const fs = require('fs').promises
 // Local libraries
 const TokenCreateFungible = require('../../../src/commands/token-create-fungible')
 const WalletCreate = require('../../../src/commands/wallet-create')
-// const MockWallet = require('../../mocks/msw-mock')
+const MockWallet = require('../../mocks/msw-mock')
 
 const walletCreate = new WalletCreate()
 const filename = `${__dirname.toString()}/../../../.wallets/test123.json`
@@ -18,7 +18,7 @@ const filename = `${__dirname.toString()}/../../../.wallets/test123.json`
 describe('#token-create-fungible', () => {
   let uut
   let sandbox
-  // let mockWallet
+  let mockWallet
 
   before(async () => {
     await walletCreate.createWallet(filename)
@@ -28,7 +28,7 @@ describe('#token-create-fungible', () => {
     sandbox = sinon.createSandbox()
 
     uut = new TokenCreateFungible()
-    // mockWallet = new MockWallet()
+    mockWallet = new MockWallet()
   })
 
   afterEach(() => {
@@ -134,6 +134,9 @@ describe('#token-create-fungible', () => {
 
   describe('#openWallet', () => {
     it('should return an instance of the wallet', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       const flags = {
         walletName: 'test123'
       }
@@ -141,7 +144,7 @@ describe('#token-create-fungible', () => {
       const result = await uut.openWallet(flags)
       // console.log('result: ', result)
 
-      assert.property(result, 'advancedOptions')
+      assert.property(result, 'walletInfoPromise')
     })
   })
 
@@ -168,6 +171,9 @@ describe('#token-create-fungible', () => {
         qty: 100
       }
 
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       // Instantiate the wallet and bch-js
       await uut.openWallet(flags)
 
@@ -182,6 +188,9 @@ describe('#token-create-fungible', () => {
 
     it('should throw an error if there are no BCH UTXOs to pay for tx', async () => {
       try {
+        // Mock dependencies and force desired code path
+        sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
         const flags = {
           walletName: 'test123'
         }
@@ -225,6 +234,9 @@ describe('#token-create-fungible', () => {
         hash: '7a427a156fe70f83d3ccdd17e75804cc0df8c95c64ce04d256b3851385002a0b'
       }
 
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       // Instantiate the wallet and bch-js
       await uut.openWallet(flags)
 
@@ -260,6 +272,7 @@ describe('#token-create-fungible', () => {
       })
       sandbox.stub(uut, 'generateTokenTx').resolves('fake-hex')
       sandbox.stub(uut.walletUtil, 'broadcastTx').resolves('fake-txid')
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
       const result = await uut.run()
 

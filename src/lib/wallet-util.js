@@ -179,6 +179,7 @@ class WalletUtil {
       // Wait for the wallet to initialize and retrieve UTXO data from the
       // blockchain.
       await bchWallet.walletInfoPromise
+      await bchWallet.initialize()
 
       return bchWallet
     } catch (err) {
