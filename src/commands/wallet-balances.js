@@ -3,7 +3,7 @@
 */
 
 // Public NPM libraries
-const BchWallet = require('minimal-slp-wallet/index')
+const BchWallet = require('minimal-slp-wallet')
 const collect = require('collect.js')
 const Conf = require('conf')
 const fs = require('fs')

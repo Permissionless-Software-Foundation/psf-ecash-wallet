@@ -4,7 +4,7 @@
 
 // Public NPM libraries
 const Conf = require('conf')
-const { Read } = require('p2wdb/index')
+const { Read } = require('p2wdb')
 
 // Local libraries
 const WalletUtil = require('../lib/wallet-util')

@@ -8,7 +8,7 @@
 
 // Public NPM libraries
 const Conf = require('conf')
-const { Write } = require('p2wdb/index')
+const { Write } = require('p2wdb')
 
 // Local libraries
 const WalletUtil = require('../lib/wallet-util')
@@ -63,7 +63,7 @@ class P2WDBWrite extends Command {
 
       // Instantiate the Write library.
       this.write = new this.Write({
-        wif: wallet.walletInfo.privateKey,
+        bchWallet: wallet,
         serverURL: p2wdbServer,
         interface: server.interface,
         restURL: server.restURL

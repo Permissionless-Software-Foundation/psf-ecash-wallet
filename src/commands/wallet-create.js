@@ -8,7 +8,7 @@
 
 // Public NPM libraries
 // const BCHJS = require('@psf/bch-js')
-const BchWallet = require('minimal-slp-wallet/index')
+const BchWallet = require('minimal-slp-wallet')
 const Conf = require('conf')
 
 // Local libraries

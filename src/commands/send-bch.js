@@ -5,7 +5,7 @@
 'use strict'
 
 // Public NPM libraries
-const BchWallet = require('minimal-slp-wallet/index')
+const BchWallet = require('minimal-slp-wallet')
 
 // Local libraries
 const WalletUtil = require('../lib/wallet-util')

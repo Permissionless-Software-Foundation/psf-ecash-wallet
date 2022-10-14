@@ -25,8 +25,8 @@
     "koa": "2.13.4",
     "koa-bodyparser": "4.3.0",
     "koa-router": "10.1.1",
-    "minimal-slp-wallet": "5.0.3",
-    "p2wdb": "1.6.1",
+    "minimal-slp-wallet": "5.4.3",
+    "p2wdb": "2.2.7",
     "semver": "7.3.5",
     "shelljs": "0.8.4",
     "uuid": "8.3.2"

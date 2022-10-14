@@ -7,7 +7,7 @@
 
 // Public NPM libraries
 const Conf = require('conf')
-const { Pin } = require('p2wdb/index')
+const { Pin } = require('p2wdb')
 
 // Local libraries
 const WalletUtil = require('../lib/wallet-util')
@@ -62,7 +62,7 @@ class P2WDBPin extends Command {
 
       // Instantiate the Write library.
       this.pin = new this.Pin({
-        wif: wallet.walletInfo.privateKey,
+        bchWallet: wallet,
         serverURL: p2wdbServer,
         interface: server.interface,
         restURL: server.restURL
