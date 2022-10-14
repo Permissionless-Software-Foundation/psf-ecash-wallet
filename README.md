@@ -81,6 +81,7 @@ In the commands below, replace `psf-bch-wallet` with `./bin/run`.
 * [`psf-bch-wallet msg-send`](#psf-bch-wallet-msg-send)
 * [`psf-bch-wallet msg-sign`](#psf-bch-wallet-msg-sign)
 * [`psf-bch-wallet msg-verify`](#psf-bch-wallet-msg-verify)
+* [`psf-bch-wallet p2wdb-json`](#psf-bch-wallet-p2wdb-json)
 * [`psf-bch-wallet p2wdb-pin`](#psf-bch-wallet-p2wdb-pin)
 * [`psf-bch-wallet p2wdb-read`](#psf-bch-wallet-p2wdb-read)
 * [`psf-bch-wallet p2wdb-write`](#psf-bch-wallet-p2wdb-write)
@@ -264,6 +265,26 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/msg-verify.js](https://github.com/Permissionless-Software-Foundation/psf-bch-wallet/blob/vv2.14.2/src/commands/msg-verify.js)_
+
+## `psf-bch-wallet p2wdb-json`
+
+Upload JSON to IPFS
+
+```
+USAGE
+  $ psf-bch-wallet p2wdb-json
+
+OPTIONS
+  -j, --json=json  A JSON string. Encase this argument in single quotes.
+  -n, --name=name  Name of wallet
+
+DESCRIPTION
+  This command uses the p2wdb npm library to upload a JSON object to an IPFS node.
+  The node returns a CID representing the JSON. That CID can then be pinned using
+  the P2WDB Pinning cluster, using the p2wdb-pin command.
+```
+
+_See code: [src/commands/p2wdb-json.js](https://github.com/Permissionless-Software-Foundation/psf-bch-wallet/blob/vv2.14.2/src/commands/p2wdb-json.js)_
 
 ## `psf-bch-wallet p2wdb-pin`
 
