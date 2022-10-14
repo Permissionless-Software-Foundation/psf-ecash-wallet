@@ -80,7 +80,6 @@ describe('#token-update', () => {
     it('should instantiate the SLP Mutable Data library', async () => {
       // Mock dependencies
       sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
-      // sandbox.stub(uut.walletUtil, 'getP2wdbServer').resolves('https://p2wdb.fullstack.cash')
 
       const flags = {
         name: 'test123'
