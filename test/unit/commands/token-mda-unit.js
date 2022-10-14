@@ -10,13 +10,15 @@ const fs = require('fs').promises
 // Local libraries
 const TokenMdaTx = require('../../../src/commands/token-mda-tx')
 const WalletCreate = require('../../../src/commands/wallet-create')
+const MockWallet = require('../../mocks/msw-mock')
 
 const walletCreate = new WalletCreate()
 const filename = `${__dirname.toString()}/../../../.wallets/test123.json`
 
-describe('#token-info', () => {
+describe('#token-mda-tx', () => {
   let uut
   let sandbox
+  let mockWallet
 
   before(async () => {
     await walletCreate.createWallet(filename)
@@ -26,7 +28,7 @@ describe('#token-info', () => {
     sandbox = sinon.createSandbox()
 
     uut = new TokenMdaTx()
-    // mockWallet = new MockWallet()
+    mockWallet = new MockWallet()
   })
 
   afterEach(() => {
@@ -78,6 +80,9 @@ describe('#token-info', () => {
 
   describe('#openWallet', () => {
     it('should return an instance of the wallet', async () => {
+      // Mock dependencies and force desired code path.
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       const flags = {
         walletName: 'test123'
       }
@@ -85,7 +90,7 @@ describe('#token-info', () => {
       const result = await uut.openWallet(flags)
       // console.log('result: ', result)
 
-      assert.property(result, 'advancedOptions')
+      assert.property(result, 'walletInfoPromise')
     })
   })
 
@@ -108,6 +113,9 @@ describe('#token-info', () => {
         walletName: 'test123',
         mda: 'bitcoincash:qr2u4f2dmva6yvf3npkd5lquryp09qk7gs5vxl423h'
       }
+
+      // Mock dependencies and force desired code path.
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
       // Instantiate the wallet and bch-js
       await uut.openWallet(flags)
@@ -137,6 +145,9 @@ describe('#token-info', () => {
           walletName: 'test123',
           mda: 'abc123'
         }
+
+        // Mock dependencies and force desired code path.
+        sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
         // Instantiate the wallet and bch-js
         await uut.openWallet(flags)

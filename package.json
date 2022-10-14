@@ -29,6 +29,7 @@
     "p2wdb": "2.2.7",
     "semver": "7.3.5",
     "shelljs": "0.8.4",
+    "slp-mutable-data": "2.2.7",
     "uuid": "8.3.2"
   },
   "devDependencies": {

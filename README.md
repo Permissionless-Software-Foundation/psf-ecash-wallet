@@ -95,6 +95,7 @@ In the commands below, replace `psf-bch-wallet` with `./bin/run`.
 * [`psf-bch-wallet token-mda-tx`](#psf-bch-wallet-token-mda-tx)
 * [`psf-bch-wallet token-mint`](#psf-bch-wallet-token-mint)
 * [`psf-bch-wallet token-tx-history`](#psf-bch-wallet-token-tx-history)
+* [`psf-bch-wallet token-update`](#psf-bch-wallet-token-update)
 * [`psf-bch-wallet wallet-addrs`](#psf-bch-wallet-wallet-addrs)
 * [`psf-bch-wallet wallet-balances`](#psf-bch-wallet-wallet-balances)
 * [`psf-bch-wallet wallet-create`](#psf-bch-wallet-wallet-create)
@@ -549,6 +550,41 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/token-tx-history.js](https://github.com/Permissionless-Software-Foundation/psf-bch-wallet/blob/vv2.14.2/src/commands/token-tx-history.js)_
+
+## `psf-bch-wallet token-update`
+
+Update token mutable data.
+
+```
+USAGE
+  $ psf-bch-wallet token-update
+
+OPTIONS
+  -c, --cid=cid    A CID that resolves to the new mutable data JSON
+  -n, --name=name  Name of wallet
+
+DESCRIPTION
+  This command is used to update the mutable data for a token.
+
+  Data updates are effected by writing a new
+  CID to an OP_RETURN inside a transaction, published to the Mutable Data Address
+  (MDA), as described in PS002.
+
+  The wallet used to pay for the transaction must control the MDA, otherwise the
+  update will be ignored.
+
+  To use this command, you'll need a CID that resolves to the updated data.
+  The p2wdb-json command can be used for that.
+
+  New mutable data follows the PS002 spec by uploading JSON data to IPFS and
+  then including the CID in an OP_RETURN. The JSON data should also follow the
+  schema in the PS007 specification:
+
+  https://github.com/Permissionless-Software-Foundation/specifications/blob/master/ps002-slp-mutable-data.md
+  https://github.com/Permissionless-Software-Foundation/specifications/blob/master/ps007-token-data-schema.md
+```
+
+_See code: [src/commands/token-update.js](https://github.com/Permissionless-Software-Foundation/psf-bch-wallet/blob/vv2.14.2/src/commands/token-update.js)_
 
 ## `psf-bch-wallet wallet-addrs`
 

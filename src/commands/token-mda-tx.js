@@ -58,6 +58,9 @@ class TokenMdaTx extends Command {
   async openWallet (flags) {
     // Instantiate the wallet and bch-js
     const wallet = await this.walletUtil.instanceWallet(flags.walletName)
+    await wallet.walletInfoPromise
+    await wallet.initialize()
+
     this.wallet = wallet
     const bchjs = wallet.bchjs
     this.bchjs = bchjs
@@ -70,6 +73,7 @@ class TokenMdaTx extends Command {
     try {
       // Get a UTXO to pay for the transaction
       const bchUtxos = this.wallet.utxos.utxoStore.bchUtxos
+      // console.log(`bchUtxos: ${JSON.stringify(bchUtxos, null, 2)}`)
       if (bchUtxos.length === 0) throw new Error('No BCH UTXOs available to pay for transaction.')
 
       // Pay for the tx with the biggest UTXO in the array.
@@ -132,7 +136,7 @@ class TokenMdaTx extends Command {
 
       return hex
     } catch (err) {
-      console.error('Error in generateTokenTx()')
+      console.error('Error in generateMdaTx()')
       throw err
     }
   }
