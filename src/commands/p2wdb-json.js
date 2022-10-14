@@ -1,7 +1,12 @@
 /*
   This command leverages the P2WDB pinning service to upload raw JSON data to
-  IPFS and return a CID. That CID can then be fed into the p2wdb-pin command
-  to pin the JSON document to all the nodes in the P2WDB pinning cluster.
+  IPFS. This happens in a two step process:
+
+  1. The JSON data is uploaded to the P2WDB.
+  2. The JSON is extracted from the P2WDB entry and pinned directly by all the
+     IPFS nodes in the P2WDB pinning cluster.
+
+  The input to this command is a JSON string. The output is an IPFS CID.
 
   Uploading JSON to IPFS in this way is used to attach mutable and immutable
   data to tokens.
@@ -9,14 +14,14 @@
 
 // Public NPM libraries
 const Conf = require('conf')
-const { Pin } = require('p2wdb')
+const { Pin, Write } = require('p2wdb')
 
 // Local libraries
 const WalletUtil = require('../lib/wallet-util')
 
 const { Command, flags } = require('@oclif/command')
 
-class P2WDBPin extends Command {
+class P2WDBJson extends Command {
   constructor (argv, config) {
     super(argv, config)
 
@@ -24,24 +29,28 @@ class P2WDBPin extends Command {
     this.walletUtil = new WalletUtil()
     this.conf = new Conf()
     this.Pin = Pin
+    this.Write = Write
+    this.wallet = null // placeholder
   }
 
   async run () {
     try {
-      const { flags } = this.parse(P2WDBPin)
+      const { flags } = this.parse(P2WDBJson)
 
       // Validate input flags
       this.validateFlags(flags)
 
       // Instantiate the Write library.
+      await this.instantiateWrite(flags)
+
+      // Instantiate the Pin library.
       await this.instantiatePin(flags)
 
-      const hash = await this.pinCid(flags)
+      const cid = await this.pinJson(flags)
 
-      // console.log(hash)
-      console.log(`https://p2wdb.fullstack.cash/entry/hash/${hash}`)
+      console.log(`JSON data pinned to IPFS with this CID: ${cid}`)
 
-      return hash
+      return cid
     } catch (err) {
       console.log('Error in p2wdb-pin.js/run(): ', err.message)
 
@@ -50,10 +59,38 @@ class P2WDBPin extends Command {
   }
 
   // Instatiate the Write library.
+  async instantiateWrite (flags) {
+    try {
+      // Instantiate the wallet.
+      this.wallet = await this.walletUtil.instanceWallet(flags.name)
+      // console.log(`wallet.walletInfo: ${JSON.stringify(wallet.walletInfo, null, 2)}`)
+
+      // Get the P2WDB server.
+      const p2wdbServer = this.walletUtil.getP2wdbServer()
+
+      // Get the REST URL
+      const server = this.walletUtil.getRestServer()
+
+      // Instantiate the Write library.
+      this.write = new this.Write({
+        bchWallet: this.wallet,
+        serverURL: p2wdbServer,
+        interface: server.interface,
+        restURL: server.restURL
+      })
+
+      return true
+    } catch (err) {
+      console.error('Error in instantiateWrite()')
+      throw err
+    }
+  }
+
+  // Instatiate the Write library.
   async instantiatePin (flags) {
     try {
       // Instantiate the wallet.
-      const wallet = await this.walletUtil.instanceWallet(flags.name)
+      // const wallet = await this.walletUtil.instanceWallet(flags.name)
       // console.log(`wallet.walletInfo: ${JSON.stringify(wallet.walletInfo, null, 2)}`)
 
       // Get the P2WDB server.
@@ -64,7 +101,7 @@ class P2WDBPin extends Command {
 
       // Instantiate the Write library.
       this.pin = new this.Pin({
-        wif: wallet.walletInfo.privateKey,
+        bchWallet: this.wallet,
         serverURL: p2wdbServer,
         interface: server.interface,
         restURL: server.restURL
@@ -78,20 +115,31 @@ class P2WDBPin extends Command {
   }
 
   // Instantiate the p2wdb Write library and write the data to the P2WDB.
-  async pinCid (flags) {
+  async pinJson (flags) {
     try {
-      // Write data to the P2WDB.
-      const result = await this.pin.cid(flags.cid)
-      // console.log('result: ', result)
+      // Parse the JSON string into an object.
+      const jsonData = JSON.parse(flags.json)
 
-      let hash = ''
-      if (result.hash.hash) {
-        hash = result.hash.hash
-      } else {
-        hash = result.hash
-      }
+      const appId = 'token-data-001'
 
-      return hash
+      // Upload JSON data to the P2WDB.
+      const result1 = await this.write.postEntry(jsonData, appId)
+      const zcid1 = result1.hash
+      console.log(`Data added to P2WDB with this zcid: ${zcid1}`)
+      console.log(`https://p2wdb.fullstack.cash/entry/hash/${zcid1}\n`)
+
+      // Request the P2WDB Pinning Service extract the data and pin it separately
+      // as an IPFS CID (which starts with 'bafy').
+      const cid = await this.pin.json(zcid1)
+      console.log(`JSON CID: ${cid}\n`)
+
+      // Pin the CID across the P2WDB pinning cluster
+      const result2 = await this.pin.cid(cid)
+      const zcid2 = result2.hash
+      console.log('Data pinned across the P2WDB Pinning Cluster.')
+      console.log(`https://p2wdb.fullstack.cash/entry/hash/${zcid2}\n`)
+
+      return cid
     } catch (err) {
       console.error('Error in pinCid(): ', err)
       throw err
@@ -106,30 +154,29 @@ class P2WDBPin extends Command {
       throw new Error('You must specify a wallet with the -n flag.')
     }
 
-    const cid = flags.cid
-    if (!cid || cid === '') {
-      throw new Error('You must specify an IPFS CID with the -c flag.')
+    const json = flags.json
+    if (!json || json === '') {
+      throw new Error('You must specify a JSON string with the -j flag.')
     }
 
     return true
   }
 }
 
-P2WDBPin.description = `Pin an IPFS CID using the P2WDB pinning service
+P2WDBJson.description = `Upload JSON to IPFS
 
-This command uses the p2wdb npm library to pin an IPFS CID using the P2WDB
-pinning service.
-
-Note: Currently only files 1MB or less are supported.
+This command uses the p2wdb npm library to upload a JSON object to an IPFS node.
+The node returns a CID representing the JSON. That CID can then be pinned using
+the P2WDB Pinning cluster, using the p2wdb-pin command.
 `
 
-P2WDBPin.flags = {
+P2WDBJson.flags = {
   name: flags.string({ char: 'n', description: 'Name of wallet' }),
 
-  cid: flags.string({
-    char: 'c',
-    description: 'IPFS CID to pin'
+  json: flags.string({
+    char: 'j',
+    description: 'A JSON string. Encase this argument in single quotes.'
   })
 }
 
-module.exports = P2WDBPin
+module.exports = P2WDBJson
