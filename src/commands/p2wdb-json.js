@@ -1,8 +1,10 @@
 /*
-  This command uses the p2wdb npm library to pin an IPFS CID using the P2WDB
-  pinning service.
+  This command leverages the P2WDB pinning service to upload raw JSON data to
+  IPFS and return a CID. That CID can then be fed into the p2wdb-pin command
+  to pin the JSON document to all the nodes in the P2WDB pinning cluster.
 
-  Note: Currently only files 1MB or less are supported.
+  Uploading JSON to IPFS in this way is used to attach mutable and immutable
+  data to tokens.
 */
 
 // Public NPM libraries
@@ -62,7 +64,7 @@ class P2WDBPin extends Command {
 
       // Instantiate the Write library.
       this.pin = new this.Pin({
-        bchWallet: wallet,
+        wif: wallet.walletInfo.privateKey,
         serverURL: p2wdbServer,
         interface: server.interface,
         restURL: server.restURL

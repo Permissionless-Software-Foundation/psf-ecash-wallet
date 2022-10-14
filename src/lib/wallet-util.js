@@ -6,7 +6,7 @@
 const fs = require('fs').promises
 const BCHJS = require('@psf/bch-js')
 const Conf = require('conf')
-const BchWallet = require('minimal-slp-wallet/index')
+const BchWallet = require('minimal-slp-wallet')
 const MsgLib = require('bch-message-lib/index')
 
 let _this // Global variable points at instance of this Class.

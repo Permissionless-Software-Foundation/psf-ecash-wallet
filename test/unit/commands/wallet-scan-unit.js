@@ -7,7 +7,7 @@
 // Public npm libraries
 const assert = require('chai').assert
 const sinon = require('sinon')
-const BchWallet = require('minimal-slp-wallet/index')
+const BchWallet = require('minimal-slp-wallet')
 
 // Local libraries
 const WalletScan = require('../../../src/commands/wallet-scan')

@@ -5,7 +5,7 @@
 */
 
 // Public NPM libraries
-const BchWallet = require('minimal-slp-wallet/index')
+const BchWallet = require('minimal-slp-wallet')
 const Conf = require('conf')
 const BchTokenSweep = require('bch-token-sweep/index')
 const { Command, flags } = require('@oclif/command')
