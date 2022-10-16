@@ -5,7 +5,7 @@
 // Global npm libraries
 const { Command, flags } = require('@oclif/command')
 const EncryptLib = require('bch-encrypt-lib/index')
-const Read = require('p2wdb/index').Read
+const Read = require('p2wdb').Read
 
 // Local libraries
 const WalletService = require('../lib/adapters/wallet-consumer')

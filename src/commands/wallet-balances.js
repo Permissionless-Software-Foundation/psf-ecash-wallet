@@ -3,7 +3,7 @@
 */
 
 // Public NPM libraries
-const BchWallet = require('minimal-ecash-wallet/index')
+const BchWallet = require('minimal-ecash-wallet')
 const collect = require('collect.js')
 const Conf = require('conf')
 const fs = require('fs')
@@ -76,6 +76,7 @@ class WalletBalances extends Command {
       // Wait for the wallet to initialize and retrieve UTXO data from the
       // blockchain.
       await this.bchWallet.walletInfoPromise
+      await this.bchWallet.initialize()
 
       // console.log(`this.bchWallet.walletInfo: ${JSON.stringify(this.bchWallet.walletInfo, null, 2)}`)
 

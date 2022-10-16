@@ -4,7 +4,7 @@
 
 // Public npm libraries
 const { Command, flags } = require('@oclif/command')
-const BchWallet = require('minimal-ecash-wallet/index')
+const BchWallet = require('minimal-ecash-wallet')
 
 // Local libraries
 const WalletUtil = require('../lib/wallet-util')

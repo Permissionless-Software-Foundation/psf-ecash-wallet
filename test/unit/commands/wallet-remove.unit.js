@@ -43,7 +43,7 @@ describe('wallet-remove', () => {
       }
 
       // Mock methods that will be tested elsewhere.
-      sandbox.stub(uut, 'parse').returns({ flags: flags })
+      sandbox.stub(uut, 'parse').returns({ flags })
 
       // Create the wallet.
       const newWallet = new WalletCreate()

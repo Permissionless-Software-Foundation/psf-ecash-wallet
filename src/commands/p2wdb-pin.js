@@ -1,55 +1,54 @@
 /*
-  This command does the following:
-  - Burns 0.01 PSF tokens and saves the TXID.
-  - Writes data to the P2WDB using the TXID as proof-of-burn
+  This command uses the p2wdb npm library to pin an IPFS CID using the P2WDB
+  pinning service.
 
-  It leverages the p2wdb npm library
+  Note: Currently only files 1MB or less are supported.
 */
 
 // Public NPM libraries
 const Conf = require('conf')
-const { Write } = require('p2wdb')
+const { Pin } = require('p2wdb')
 
 // Local libraries
 const WalletUtil = require('../lib/wallet-util')
 
 const { Command, flags } = require('@oclif/command')
 
-class P2WDBWrite extends Command {
+class P2WDBPin extends Command {
   constructor (argv, config) {
     super(argv, config)
 
     // Encapsulate dependencies.
     this.walletUtil = new WalletUtil()
     this.conf = new Conf()
-    this.Write = Write
+    this.Pin = Pin
   }
 
   async run () {
     try {
-      const { flags } = this.parse(P2WDBWrite)
+      const { flags } = this.parse(P2WDBPin)
 
       // Validate input flags
       this.validateFlags(flags)
 
       // Instantiate the Write library.
-      await this.instantiateWrite(flags)
+      await this.instantiatePin(flags)
 
-      const cid = await this.writeData(flags)
+      const hash = await this.pinCid(flags)
 
-      console.log(cid)
-      console.log(`https://p2wdb.fullstack.cash/entry/hash/${cid}`)
+      // console.log(hash)
+      console.log(`https://p2wdb.fullstack.cash/entry/hash/${hash}`)
 
-      return cid
+      return hash
     } catch (err) {
-      console.log('Error in p2wdb-write.js/run(): ', err.message)
+      console.log('Error in p2wdb-pin.js/run(): ', err.message)
 
       return 0
     }
   }
 
   // Instatiate the Write library.
-  async instantiateWrite (flags) {
+  async instantiatePin (flags) {
     try {
       // Instantiate the wallet.
       const wallet = await this.walletUtil.instanceWallet(flags.name)
@@ -62,7 +61,7 @@ class P2WDBWrite extends Command {
       const server = this.walletUtil.getRestServer()
 
       // Instantiate the Write library.
-      this.write = new this.Write({
+      this.pin = new this.Pin({
         bchWallet: wallet,
         serverURL: p2wdbServer,
         interface: server.interface,
@@ -77,10 +76,10 @@ class P2WDBWrite extends Command {
   }
 
   // Instantiate the p2wdb Write library and write the data to the P2WDB.
-  async writeData (flags) {
+  async pinCid (flags) {
     try {
       // Write data to the P2WDB.
-      const result = await this.write.postEntry(flags.data, flags.appId)
+      const result = await this.pin.cid(flags.cid)
       // console.log('result: ', result)
 
       let hash = ''
@@ -92,7 +91,7 @@ class P2WDBWrite extends Command {
 
       return hash
     } catch (err) {
-      console.error('Error in writeData(): ', err)
+      console.error('Error in pinCid(): ', err)
       throw err
     }
   }
@@ -105,38 +104,30 @@ class P2WDBWrite extends Command {
       throw new Error('You must specify a wallet with the -n flag.')
     }
 
-    const data = flags.data
-    if (!data || data === '') {
-      throw new Error('You must specify a string of data with the -d flag.')
-    }
-
-    const appId = flags.appId
-    if (!appId || appId === '') {
-      throw new Error('You must specify an appId with the -a flag.')
+    const cid = flags.cid
+    if (!cid || cid === '') {
+      throw new Error('You must specify an IPFS CID with the -c flag.')
     }
 
     return true
   }
 }
 
-P2WDBWrite.description = `Write an entry to the pay-to-write database (P2WDB)
+P2WDBPin.description = `Pin an IPFS CID using the P2WDB pinning service
 
-In order to execute this command, the wallet must contain some BCH and some PSF
-token, in order to pay for the write to the P2WDB.
+This command uses the p2wdb npm library to pin an IPFS CID using the P2WDB
+pinning service.
+
+Note: Currently only files 1MB or less are supported.
 `
 
-P2WDBWrite.flags = {
+P2WDBPin.flags = {
   name: flags.string({ char: 'n', description: 'Name of wallet' }),
 
-  data: flags.string({
-    char: 'd',
-    description: 'String of data to write to the P2WDB'
-  }),
-
-  appId: flags.string({
-    char: 'a',
-    description: 'appId string to categorize data'
+  cid: flags.string({
+    char: 'c',
+    description: 'IPFS CID to pin'
   })
 }
 
-module.exports = P2WDBWrite
+module.exports = P2WDBPin

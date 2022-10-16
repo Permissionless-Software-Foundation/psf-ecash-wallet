@@ -7,7 +7,7 @@
 'use strict'
 
 // Public NPM libraries
-const BchWallet = require('minimal-ecash-wallet/index')
+const BchWallet = require('minimal-ecash-wallet')
 const Conf = require('conf')
 
 // Local libraries

@@ -55,6 +55,8 @@ In the commands below, replace `psf-bch-wallet` with `./bin/run`.
 * [`psf-bch-wallet msg-send`](#psf-bch-wallet-msg-send)
 * [`psf-bch-wallet msg-sign`](#psf-bch-wallet-msg-sign)
 * [`psf-bch-wallet msg-verify`](#psf-bch-wallet-msg-verify)
+* [`psf-bch-wallet p2wdb-json`](#psf-bch-wallet-p2wdb-json)
+* [`psf-bch-wallet p2wdb-pin`](#psf-bch-wallet-p2wdb-pin)
 * [`psf-bch-wallet p2wdb-read`](#psf-bch-wallet-p2wdb-read)
 * [`psf-bch-wallet p2wdb-write`](#psf-bch-wallet-p2wdb-write)
 * [`psf-bch-wallet send-bch`](#psf-bch-wallet-send-bch)
@@ -64,8 +66,10 @@ In the commands below, replace `psf-bch-wallet` with `./bin/run`.
 * [`psf-bch-wallet token-create-group`](#psf-bch-wallet-token-create-group)
 * [`psf-bch-wallet token-create-nft`](#psf-bch-wallet-token-create-nft)
 * [`psf-bch-wallet token-info`](#psf-bch-wallet-token-info)
+* [`psf-bch-wallet token-mda-tx`](#psf-bch-wallet-token-mda-tx)
 * [`psf-bch-wallet token-mint`](#psf-bch-wallet-token-mint)
 * [`psf-bch-wallet token-tx-history`](#psf-bch-wallet-token-tx-history)
+* [`psf-bch-wallet token-update`](#psf-bch-wallet-token-update)
 * [`psf-bch-wallet wallet-addrs`](#psf-bch-wallet-wallet-addrs)
 * [`psf-bch-wallet wallet-balances`](#psf-bch-wallet-wallet-balances)
 * [`psf-bch-wallet wallet-create`](#psf-bch-wallet-wallet-create)
@@ -236,6 +240,47 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/msg-verify.js](https://github.com/Permissionless-Software-Foundation/psf-bch-wallet/blob/vv2.14.2/src/commands/msg-verify.js)_
+
+## `psf-bch-wallet p2wdb-json`
+
+Upload JSON to IPFS
+
+```
+USAGE
+  $ psf-bch-wallet p2wdb-json
+
+OPTIONS
+  -j, --json=json  A JSON string. Encase this argument in single quotes.
+  -n, --name=name  Name of wallet
+
+DESCRIPTION
+  This command uses the p2wdb npm library to upload a JSON object to an IPFS node.
+  The node returns a CID representing the JSON. That CID can then be pinned using
+  the P2WDB Pinning cluster, using the p2wdb-pin command.
+```
+
+_See code: [src/commands/p2wdb-json.js](https://github.com/Permissionless-Software-Foundation/psf-bch-wallet/blob/vv2.14.2/src/commands/p2wdb-json.js)_
+
+## `psf-bch-wallet p2wdb-pin`
+
+Pin an IPFS CID using the P2WDB pinning service
+
+```
+USAGE
+  $ psf-bch-wallet p2wdb-pin
+
+OPTIONS
+  -c, --cid=cid    IPFS CID to pin
+  -n, --name=name  Name of wallet
+
+DESCRIPTION
+  This command uses the p2wdb npm library to pin an IPFS CID using the P2WDB
+  pinning service.
+
+  Note: Currently only files 1MB or less are supported.
+```
+
+_See code: [src/commands/p2wdb-pin.js](https://github.com/Permissionless-Software-Foundation/psf-bch-wallet/blob/vv2.14.2/src/commands/p2wdb-pin.js)_
 
 ## `psf-bch-wallet p2wdb-read`
 
@@ -409,6 +454,32 @@ DESCRIPTION
 
 _See code: [src/commands/token-info.js](https://github.com/Permissionless-Software-Foundation/psf-bch-wallet/blob/vv2.14.2/src/commands/token-info.js)_
 
+## `psf-bch-wallet token-mda-tx`
+
+Create TXID for token mutable data
+
+```
+USAGE
+  $ psf-bch-wallet token-mda-tx
+
+OPTIONS
+  -a, --mda=mda                Mutable data address
+  -n, --walletName=walletName  Name of wallet to pay for transaction
+
+DESCRIPTION
+  MDA is an acrynym for 'Mutable Data Address'
+
+  This command is used to generate a TXID for attaching mutable data to a token.
+  Given a BCH address, it generates a transaction to turn that address into
+  the controller of mutable data for a token. This generates a TXID which is
+  used in the tokens 'documentHash' field when creating the token.
+
+  PS002 specification for mutable data:
+  https://github.com/Permissionless-Software-Foundation/specifications/blob/master/ps002-slp-mutable-data.md
+```
+
+_See code: [src/commands/token-mda-tx.js](https://github.com/Permissionless-Software-Foundation/psf-bch-wallet/blob/vv2.14.2/src/commands/token-mda-tx.js)_
+
 ## `psf-bch-wallet token-mint`
 
 Mint new Fungible (Type 1) or Group tokens
@@ -453,6 +524,41 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/token-tx-history.js](https://github.com/Permissionless-Software-Foundation/psf-bch-wallet/blob/vv2.14.2/src/commands/token-tx-history.js)_
+
+## `psf-bch-wallet token-update`
+
+Update token mutable data.
+
+```
+USAGE
+  $ psf-bch-wallet token-update
+
+OPTIONS
+  -c, --cid=cid    A CID that resolves to the new mutable data JSON
+  -n, --name=name  Name of wallet
+
+DESCRIPTION
+  This command is used to update the mutable data for a token.
+
+  Data updates are effected by writing a new
+  CID to an OP_RETURN inside a transaction, published to the Mutable Data Address
+  (MDA), as described in PS002.
+
+  The wallet used to pay for the transaction must control the MDA, otherwise the
+  update will be ignored.
+
+  To use this command, you'll need a CID that resolves to the updated data.
+  The p2wdb-json command can be used for that.
+
+  New mutable data follows the PS002 spec by uploading JSON data to IPFS and
+  then including the CID in an OP_RETURN. The JSON data should also follow the
+  schema in the PS007 specification:
+
+  https://github.com/Permissionless-Software-Foundation/specifications/blob/master/ps002-slp-mutable-data.md
+  https://github.com/Permissionless-Software-Foundation/specifications/blob/master/ps007-token-data-schema.md
+```
+
+_See code: [src/commands/token-update.js](https://github.com/Permissionless-Software-Foundation/psf-bch-wallet/blob/vv2.14.2/src/commands/token-update.js)_
 
 ## `psf-bch-wallet wallet-addrs`
 
