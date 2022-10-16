@@ -20,7 +20,7 @@
 */
 
 // Public NPM libraries
-const BchWallet = require('minimal-ecash-wallet/index')
+const BchWallet = require('minimal-ecash-wallet')
 const Conf = require('conf')
 const { Command, flags } = require('@oclif/command')
 
@@ -205,7 +205,7 @@ class ScanMnemonic extends Command {
         balance = balanceData
       }
 
-      return { hasHistory: hasHistory, balance: balance }
+      return { hasHistory, balance }
     } catch (err) {
       console.log('Error in addrTxHistory()')
       throw err

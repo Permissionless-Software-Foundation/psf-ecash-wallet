@@ -7,7 +7,7 @@
 // Public npm libraries
 const assert = require('chai').assert
 const sinon = require('sinon')
-const BchWallet = require('minimal-ecash-wallet/index')
+const BchWallet = require('minimal-ecash-wallet')
 
 // Local libraries
 const WalletSweep = require('../../../src/commands/wallet-sweep')
@@ -323,7 +323,7 @@ describe('#wallet-sweep', () => {
       }
 
       // Mock methods that will be tested elsewhere.
-      sandbox.stub(uut, 'parse').returns({ flags: flags })
+      sandbox.stub(uut, 'parse').returns({ flags })
       sandbox.stub(uut, 'validateFlags').returns()
       sandbox.stub(uut, 'getReceiverWif').resolves()
       sandbox.stub(uut, 'sweepMnemonic').resolves()
@@ -339,7 +339,7 @@ describe('#wallet-sweep', () => {
       }
 
       // Mock methods that will be tested elsewhere.
-      sandbox.stub(uut, 'parse').returns({ flags: flags })
+      sandbox.stub(uut, 'parse').returns({ flags })
       sandbox.stub(uut, 'validateFlags').returns()
       sandbox.stub(uut, 'getReceiverWif').resolves()
       sandbox.stub(uut, 'sweepWif').resolves()

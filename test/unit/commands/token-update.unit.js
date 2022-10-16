@@ -1,20 +1,19 @@
 /*
-  Unit tests for the p2wdb-write command.
+  Unit tests for the token-update command.
 */
 
 const assert = require('chai').assert
 const sinon = require('sinon')
 const fs = require('fs').promises
 
-const P2WDBWrite = require('../../../src/commands/p2wdb-write')
-// const SendBCHMock = require('../../mocks/send-bch-mock')
+const TokenUpdate = require('../../../src/commands/token-update')
 const WalletCreate = require('../../../src/commands/wallet-create')
 const walletCreate = new WalletCreate()
 const MockWallet = require('../../mocks/msw-mock')
 
 const filename = `${__dirname.toString()}/../../../.wallets/test123.json`
 
-describe('#p2wdb-write', () => {
+describe('#token-update', () => {
   let uut
   let sandbox
   let mockWallet
@@ -26,7 +25,7 @@ describe('#p2wdb-write', () => {
   beforeEach(async () => {
     sandbox = sinon.createSandbox()
 
-    uut = new P2WDBWrite()
+    uut = new TokenUpdate()
     mockWallet = new MockWallet()
   })
 
@@ -42,8 +41,7 @@ describe('#p2wdb-write', () => {
     it('validateFlags() should return true.', () => {
       const flags = {
         name: 'test123',
-        data: 'a string of data',
-        appId: 'test'
+        cid: 'test'
       }
 
       assert.equal(uut.validateFlags(flags), true, 'return true')
@@ -62,7 +60,7 @@ describe('#p2wdb-write', () => {
       }
     })
 
-    it('validateFlags() should throw error if data is not supplied.', () => {
+    it('validateFlags() should throw error if cid is not supplied.', () => {
       try {
         const flags = {
           name: 'test123'
@@ -71,47 +69,30 @@ describe('#p2wdb-write', () => {
       } catch (err) {
         assert.include(
           err.message,
-          'You must specify a string of data with the -d flag.',
-          'Expected error message.'
-        )
-      }
-    })
-
-    it('validateFlags() should throw error if appId is not supplied.', () => {
-      try {
-        const flags = {
-          name: 'test123',
-          data: 'test data'
-        }
-        uut.validateFlags(flags)
-      } catch (err) {
-        assert.include(
-          err.message,
-          'You must specify an appId with the -a flag.',
+          'You must specify a CID with the -c flag.',
           'Expected error message.'
         )
       }
     })
   })
 
-  describe('#instantiateWrite', () => {
-    it('should instantiate the Write library', async () => {
+  describe('#instantiateSlpData', () => {
+    it('should instantiate the SLP Mutable Data library', async () => {
       // Mock dependencies
       sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
-      sandbox.stub(uut.walletUtil, 'getP2wdbServer').resolves('https://p2wdb.fullstack.cash')
 
       const flags = {
         name: 'test123'
       }
 
-      const result = await uut.instantiateWrite(flags)
+      const result = await uut.instantiateSlpData(flags)
 
       assert.equal(result, true)
     })
 
     it('should catch and throw errors', async () => {
       try {
-        await uut.instantiateWrite()
+        await uut.instantiateSlpData()
 
         assert.fail('Unexpected code path')
       } catch (err) {
@@ -120,37 +101,47 @@ describe('#p2wdb-write', () => {
     })
   })
 
-  describe('#writeData', () => {
-    it('should write data to the P2WDB', async () => {
-      // Mock dependencies
-      uut.write = {
-        postEntry: () => { return { hash: 'fake-hash' } }
+  describe('#updateMutableData', () => {
+    it('should generate tx to update mutable data', async () => {
+      const flags = {
+        name: 'test123',
+        cid: 'fake-cid'
       }
 
-      const result = await uut.writeData({})
+      await uut.instantiateSlpData(flags)
 
-      assert.equal(result, 'fake-hash')
+      // Mock dependencies and force desired code path.
+      sandbox.stub(uut.slpMutableData.data, 'writeCIDToOpReturn').resolves('fake-hex')
+
+      const result = await uut.updateMutableData(flags)
+
+      assert.equal(result, 'fake-hex')
+    })
+
+    it('should handle CIDs with a prefix', async () => {
+      const flags = {
+        name: 'test123',
+        cid: 'ipfs://fake-cid'
+      }
+
+      await uut.instantiateSlpData(flags)
+
+      // Mock dependencies and force desired code path.
+      sandbox.stub(uut.slpMutableData.data, 'writeCIDToOpReturn').resolves('fake-hex')
+
+      const result = await uut.updateMutableData(flags)
+
+      assert.equal(result, 'fake-hex')
     })
 
     it('should catch and throw errors', async () => {
       try {
-        await uut.writeData()
+        await uut.updateMutableData()
 
         assert.fail('Unexpected code path')
       } catch (err) {
         assert.include(err.message, 'Cannot read')
       }
-    })
-
-    it('should write data to the P2WDB when paying with BCH', async () => {
-      // Mock dependencies
-      uut.write = {
-        postEntry: () => { return { hash: { hash: 'fake-hash' } } }
-      }
-
-      const result = await uut.writeData({})
-
-      assert.equal(result, 'fake-hash')
     })
   })
 
@@ -163,16 +154,21 @@ describe('#p2wdb-write', () => {
       assert.equal(result, 0)
     })
 
-    it('should return a CID', async () => {
+    it('should return a TXID', async () => {
+      const flags = {
+        name: 'test123',
+        cid: 'fake-cid'
+      }
+
       // Mock dependencies
-      sandbox.stub(uut, 'parse').returns({ flags: {} })
+      sandbox.stub(uut, 'parse').returns({ flags })
       sandbox.stub(uut, 'validateFlags').returns()
-      sandbox.stub(uut, 'instantiateWrite').resolves()
-      sandbox.stub(uut, 'writeData').resolves('fake-cid')
+      sandbox.stub(uut, 'updateMutableData').resolves('fake-hex')
+      sandbox.stub(uut.walletUtil, 'broadcastTx').resolves('fake-txid')
 
       const result = await uut.run()
 
-      assert.equal(result, 'fake-cid')
+      assert.equal(result, 'fake-txid')
     })
   })
 })

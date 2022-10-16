@@ -6,7 +6,7 @@
 const { Command, flags } = require('@oclif/command')
 const EncryptLib = require('bch-encrypt-lib/index')
 const eccrypto = require('eccrypto-js')
-const Write = require('p2wdb/index').Write
+const Write = require('p2wdb').Write
 
 // Local libraries
 const WalletService = require('../lib/adapters/wallet-consumer')

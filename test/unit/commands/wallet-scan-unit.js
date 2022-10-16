@@ -7,7 +7,7 @@
 // Public npm libraries
 const assert = require('chai').assert
 const sinon = require('sinon')
-const BchWallet = require('minimal-ecash-wallet/index')
+const BchWallet = require('minimal-ecash-wallet')
 
 // Local libraries
 const WalletScan = require('../../../src/commands/wallet-scan')
@@ -237,7 +237,7 @@ describe('#wallet-scan', () => {
         mnemonic: 'assist field wrist ridge violin visa mango minor vibrant this scorpion asthma'
       }
       // Mock methods that will be tested elsewhere.
-      sandbox.stub(uut, 'parse').returns({ flags: flags })
+      sandbox.stub(uut, 'parse').returns({ flags })
 
       const result = await uut.run()
 

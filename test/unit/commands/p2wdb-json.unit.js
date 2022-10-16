@@ -1,20 +1,21 @@
 /*
-  Unit tests for the p2wdb-write command.
+  Unit tests for the p2wdb-json command.
 */
 
+// Global npm libraries
 const assert = require('chai').assert
 const sinon = require('sinon')
 const fs = require('fs').promises
 
-const P2WDBWrite = require('../../../src/commands/p2wdb-write')
-// const SendBCHMock = require('../../mocks/send-bch-mock')
+// Local libraries
+const P2WDBJson = require('../../../src/commands/p2wdb-json')
 const WalletCreate = require('../../../src/commands/wallet-create')
 const walletCreate = new WalletCreate()
 const MockWallet = require('../../mocks/msw-mock')
 
 const filename = `${__dirname.toString()}/../../../.wallets/test123.json`
 
-describe('#p2wdb-write', () => {
+describe('#p2wdb-json', () => {
   let uut
   let sandbox
   let mockWallet
@@ -26,7 +27,7 @@ describe('#p2wdb-write', () => {
   beforeEach(async () => {
     sandbox = sinon.createSandbox()
 
-    uut = new P2WDBWrite()
+    uut = new P2WDBJson()
     mockWallet = new MockWallet()
   })
 
@@ -42,8 +43,7 @@ describe('#p2wdb-write', () => {
     it('validateFlags() should return true.', () => {
       const flags = {
         name: 'test123',
-        data: 'a string of data',
-        appId: 'test'
+        json: 'test'
       }
 
       assert.equal(uut.validateFlags(flags), true, 'return true')
@@ -62,7 +62,7 @@ describe('#p2wdb-write', () => {
       }
     })
 
-    it('validateFlags() should throw error if data is not supplied.', () => {
+    it('validateFlags() should throw error if json is not supplied.', () => {
       try {
         const flags = {
           name: 'test123'
@@ -71,23 +71,7 @@ describe('#p2wdb-write', () => {
       } catch (err) {
         assert.include(
           err.message,
-          'You must specify a string of data with the -d flag.',
-          'Expected error message.'
-        )
-      }
-    })
-
-    it('validateFlags() should throw error if appId is not supplied.', () => {
-      try {
-        const flags = {
-          name: 'test123',
-          data: 'test data'
-        }
-        uut.validateFlags(flags)
-      } catch (err) {
-        assert.include(
-          err.message,
-          'You must specify an appId with the -a flag.',
+          'You must specify a JSON string with the -j flag.',
           'Expected error message.'
         )
       }
@@ -120,37 +104,62 @@ describe('#p2wdb-write', () => {
     })
   })
 
-  describe('#writeData', () => {
-    it('should write data to the P2WDB', async () => {
+  describe('#instantiatePin', () => {
+    it('should instantiate the Pin library', async () => {
       // Mock dependencies
-      uut.write = {
-        postEntry: () => { return { hash: 'fake-hash' } }
+      // sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+      uut.wallet = mockWallet
+      sandbox.stub(uut.walletUtil, 'getP2wdbServer').resolves('https://p2wdb.fullstack.cash')
+
+      const flags = {
+        name: 'test123'
       }
 
-      const result = await uut.writeData({})
+      const result = await uut.instantiatePin(flags)
 
-      assert.equal(result, 'fake-hash')
+      assert.equal(result, true)
     })
 
     it('should catch and throw errors', async () => {
       try {
-        await uut.writeData()
+        await uut.instantiatePin()
+
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'Must pass instance')
+      }
+    })
+  })
+
+  describe('#pinJson', () => {
+    it('should post JSON and return CID', async () => {
+      const flags = {
+        name: 'test123'
+      }
+
+      await uut.instantiateWrite(flags)
+      await uut.instantiatePin(flags)
+
+      // Mock dependencies and force desired code path.
+      sandbox.stub(uut.write, 'postEntry').resolves({ hash: 'hash1' })
+      sandbox.stub(uut.pin, 'json').resolves('fake-cid')
+      sandbox.stub(uut.pin, 'cid').resolves({ hash: 'hash2' })
+
+      // await uut.
+
+      const result = await uut.pinJson({ json: '{"a": "b"}' })
+
+      assert.equal(result, 'fake-cid')
+    })
+
+    it('should catch and throw errors', async () => {
+      try {
+        await uut.pinJson()
 
         assert.fail('Unexpected code path')
       } catch (err) {
         assert.include(err.message, 'Cannot read')
       }
-    })
-
-    it('should write data to the P2WDB when paying with BCH', async () => {
-      // Mock dependencies
-      uut.write = {
-        postEntry: () => { return { hash: { hash: 'fake-hash' } } }
-      }
-
-      const result = await uut.writeData({})
-
-      assert.equal(result, 'fake-hash')
     })
   })
 
@@ -165,10 +174,9 @@ describe('#p2wdb-write', () => {
 
     it('should return a CID', async () => {
       // Mock dependencies
-      sandbox.stub(uut, 'parse').returns({ flags: {} })
+      sandbox.stub(uut, 'parse').returns({ flags: { name: 'test123' } })
       sandbox.stub(uut, 'validateFlags').returns()
-      sandbox.stub(uut, 'instantiateWrite').resolves()
-      sandbox.stub(uut, 'writeData').resolves('fake-cid')
+      sandbox.stub(uut, 'pinJson').resolves('fake-cid')
 
       const result = await uut.run()
 

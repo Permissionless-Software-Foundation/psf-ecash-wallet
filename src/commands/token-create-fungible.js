@@ -3,7 +3,7 @@
 */
 
 // Public NPM libraries
-const BchWallet = require('minimal-ecash-wallet/index')
+const BchWallet = require('minimal-ecash-wallet')
 const { Command, flags } = require('@oclif/command')
 
 // Local libraries
