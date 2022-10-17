@@ -105,16 +105,17 @@ class WalletUtil {
         restURL: this.conf.get('restURL', false),
         interface: this.conf.get('interface', false)
       }
+      // console.log('outObj: ', outObj)
 
       if (!outObj.restURL) {
-        outObj.restURL = 'https://abc.fullstack.cash/v5/'
+        outObj.restURL = 'http://wa-usa-xec-consumer.fullstackcash.nl'
 
         this.conf.set('restURL', outObj.restURL)
       }
 
       if (!outObj.interface) {
-        // outObj.interface = 'consumer-api'
-        outObj.interface = 'rest-api'
+        outObj.interface = 'consumer-api'
+        // outObj.interface = 'rest-api'
 
         this.conf.set('interface', outObj.interface)
       }
