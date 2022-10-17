@@ -133,10 +133,10 @@ class WalletServiceTest extends Command {
       const result = await this.walletService.sendTx(txHex)
       // console.log('result: ', result)
 
-      if (result.message.includes('Missing inputs')) {
+      if (result.message.includes('missingorspent')) {
         console.log('TX broadcast responded with expected message')
       } else {
-        console.log('TX broadcast reponsed with unexpected message: ', result)
+        console.log('TX broadcast responded with unexpected message: ', result)
       }
     } catch (err) {
       console.log('Error in testBroadcast()')
@@ -146,7 +146,9 @@ class WalletServiceTest extends Command {
 
   async getPubKey () {
     try {
-      const addr = 'bitcoincash:qr2u4f2dmva6yvf3npkd5lquryp09qk7gs5vxl423h'
+      let addr = 'ecash:qpnwj49lrqftmwuvsy0ryr6gqjmtm98qv5xye2ktmf'
+
+      addr = this.bchWallet.bchjs.Address.ecashtoCashAddress(addr)
 
       const result = await this.walletService.getPubKey(addr)
       // console.log('result: ', result)
