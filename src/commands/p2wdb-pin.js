@@ -36,8 +36,11 @@ class P2WDBPin extends Command {
 
       const hash = await this.pinCid(flags)
 
+      // Get the P2WDB server.
+      const p2wdbServer = this.walletUtil.getP2wdbServer()
+
       // console.log(hash)
-      console.log(`https://p2wdb.fullstack.cash/entry/hash/${hash}`)
+      console.log(`${p2wdbServer}/entry/hash/${hash}`)
 
       return hash
     } catch (err) {

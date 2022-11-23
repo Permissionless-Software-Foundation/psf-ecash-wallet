@@ -134,7 +134,7 @@ class WalletUtil {
       let p2wdbServer = this.conf.get('p2wdbServer', false)
 
       if (!p2wdbServer) {
-        p2wdbServer = 'https://p2wdb.fullstack.cash'
+        p2wdbServer = 'https://xec-p2wdb.fullstack.cash'
 
         this.conf.set('p2wdbServer', p2wdbServer)
       }
