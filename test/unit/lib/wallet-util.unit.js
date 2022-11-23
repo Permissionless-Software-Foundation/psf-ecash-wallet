@@ -127,6 +127,10 @@ describe('#Wallet-Util', () => {
         async walletInfoPromise () {
           return true
         }
+
+        async initialize () {
+          return true
+        }
       }
 
       // Create a wallet

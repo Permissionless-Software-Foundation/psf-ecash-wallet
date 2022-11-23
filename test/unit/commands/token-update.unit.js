@@ -108,6 +108,9 @@ describe('#token-update', () => {
         cid: 'fake-cid'
       }
 
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       await uut.instantiateSlpData(flags)
 
       // Mock dependencies and force desired code path.
@@ -123,6 +126,9 @@ describe('#token-update', () => {
         name: 'test123',
         cid: 'ipfs://fake-cid'
       }
+
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
       await uut.instantiateSlpData(flags)
 
@@ -160,7 +166,8 @@ describe('#token-update', () => {
         cid: 'fake-cid'
       }
 
-      // Mock dependencies
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
       sandbox.stub(uut, 'parse').returns({ flags })
       sandbox.stub(uut, 'validateFlags').returns()
       sandbox.stub(uut, 'updateMutableData').resolves('fake-hex')

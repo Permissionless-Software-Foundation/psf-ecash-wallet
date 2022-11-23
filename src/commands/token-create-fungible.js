@@ -39,7 +39,7 @@ class TokenCreateFungible extends Command {
       const txid = await this.walletUtil.broadcastTx(this.wallet, hex)
 
       console.log(`New token ${flags.ticker} created! Token ID: ${txid}`)
-      console.log(`https://token.fullstack.cash/transactions/?txid=${txid}`)
+      console.log(`https://token.fullstack.cash/?tokenid=${txid}`)
 
       return txid
     } catch (err) {
@@ -210,7 +210,7 @@ TokenCreateFungible.flags = {
   qty: flags.string({ char: 'q', description: 'Quantity of tokens to create' }),
   url: flags.string({ char: 'u', description: '(optional) Document URL of the group' }),
   hash: flags.string({ char: 'h', description: '(optional) Document hash of the group' }),
-  baton: flags.boolean({ char: 'b', description: '(optional) create a minting baton', default: false })
+  baton: flags.boolean({ char: 'b', description: '(optional Boolean) create a minting baton', default: false })
 }
 
 module.exports = TokenCreateFungible

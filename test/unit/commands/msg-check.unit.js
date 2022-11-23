@@ -10,10 +10,12 @@ const MsgCheckMock = require('../../mocks/msg-check-mock')
 const filename = `${__dirname.toString()}/../../../.wallets/test123.json`
 const WalletCreate = require('../../../src/commands/wallet-create')
 const walletCreate = new WalletCreate()
+const MockWallet = require('../../mocks/msw-mock')
 
-describe('msg-send', () => {
+describe('msg-check', () => {
   let uut
   let sandbox
+  let mockWallet
 
   before(async () => {
     await walletCreate.createWallet(filename)
@@ -23,6 +25,7 @@ describe('msg-send', () => {
     sandbox = sinon.createSandbox()
 
     uut = new MsgCheck()
+    mockWallet = new MockWallet()
   })
 
   afterEach(() => {
@@ -113,8 +116,8 @@ describe('msg-send', () => {
     })
 
     it('should return false if messages list is empty.', async () => {
-      // Prevent wallet from making a network call.
-      uut.walletUtil.advancedConfig.noUpdate = true
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
       // Mock the memo library
       class Memo {
@@ -135,9 +138,9 @@ describe('msg-send', () => {
       assert.isFalse(result)
     })
 
-    it('should check messages.', async () => {
-      // Prevent wallet from making a network call.
-      uut.walletUtil.advancedConfig.noUpdate = true
+    it('should check messages', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
       // Mock the memo library
       class Memo {
@@ -180,8 +183,8 @@ describe('msg-send', () => {
     })
 
     it('should run the run() function', async () => {
-      // Prevent wallet from making a network call.
-      uut.walletUtil.advancedConfig.noUpdate = true
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
       // Mock the memo library
       class Memo {

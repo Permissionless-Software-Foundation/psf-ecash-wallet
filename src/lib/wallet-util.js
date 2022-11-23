@@ -161,8 +161,8 @@ class WalletUtil {
 
       // Get the currently selected REST server from the config.
       const server = this.getRestServer()
-      console.log(`restURL: ${server.restURL}`)
-      console.log(`interface: ${server.interface}`)
+      // console.log(`restURL: ${server.restURL}`)
+      // console.log(`interface: ${server.interface}`)
 
       // Hook for unit tests, to disable network calls.
       if (walletName === 'test123') {
@@ -179,6 +179,7 @@ class WalletUtil {
       // Wait for the wallet to initialize and retrieve UTXO data from the
       // blockchain.
       await bchWallet.walletInfoPromise
+      await bchWallet.initialize()
 
       return bchWallet
     } catch (err) {
