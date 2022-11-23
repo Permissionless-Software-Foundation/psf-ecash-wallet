@@ -126,6 +126,10 @@ class BchWallet {
   async initialize () {
     return true
   }
+
+  async getTxData () {
+    return true
+  }
 }
 
 module.exports = BchWallet

@@ -119,13 +119,15 @@ describe('#msg-sign', () => {
     })
 
     it('should return true on successful execution', async () => {
-      // Mock dependencies
+      // Mock dependencies and force desired code path
       sandbox.stub(uut, 'parse').returns({
         flags: {
           name: 'test123',
           msg: 'test'
         }
       })
+      sandbox.stub(uut, 'validateFlags').returns()
+      sandbox.stub(uut, 'sign').resolves({})
 
       const result = await uut.run()
 
