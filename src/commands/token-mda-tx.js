@@ -114,7 +114,7 @@ class TokenMdaTx extends Command {
       transactionBuilder.addOutput(flags.mda, dust)
 
       // add output to send BCH remainder of UTXO.
-      transactionBuilder.addOutput(this.wallet.walletInfo.address, remainder)
+      transactionBuilder.addOutput(this.wallet.walletInfo.legacyAddress, remainder)
 
       // Generate a keypair from the change address.
       const keyPair = this.bchjs.ECPair.fromWIF(this.wallet.walletInfo.privateKey)

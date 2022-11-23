@@ -173,6 +173,7 @@ class WalletUtil {
 
       // Configure the minimal-ecash-wallet library.
       this.advancedConfig.restURL = server.restURL
+      this.advancedConfig.interface = server.interface
       const bchWallet = new this.BchWallet(
         walletData.mnemonic,
         this.advancedConfig
@@ -181,6 +182,7 @@ class WalletUtil {
       // Wait for the wallet to initialize and retrieve UTXO data from the
       // blockchain.
       await bchWallet.walletInfoPromise
+      await bchWallet.initialize()
 
       return bchWallet
     } catch (err) {
