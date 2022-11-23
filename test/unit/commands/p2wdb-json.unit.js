@@ -137,6 +137,7 @@ describe('#p2wdb-json', () => {
         name: 'test123'
       }
 
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
       await uut.instantiateWrite(flags)
       await uut.instantiatePin(flags)
 
@@ -144,8 +145,6 @@ describe('#p2wdb-json', () => {
       sandbox.stub(uut.write, 'postEntry').resolves({ hash: 'hash1' })
       sandbox.stub(uut.pin, 'json').resolves('fake-cid')
       sandbox.stub(uut.pin, 'cid').resolves({ hash: 'hash2' })
-
-      // await uut.
 
       const result = await uut.pinJson({ json: '{"a": "b"}' })
 
@@ -177,6 +176,7 @@ describe('#p2wdb-json', () => {
       sandbox.stub(uut, 'parse').returns({ flags: { name: 'test123' } })
       sandbox.stub(uut, 'validateFlags').returns()
       sandbox.stub(uut, 'pinJson').resolves('fake-cid')
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
       const result = await uut.run()
 

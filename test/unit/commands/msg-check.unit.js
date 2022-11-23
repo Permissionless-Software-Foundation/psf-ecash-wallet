@@ -119,9 +119,6 @@ describe('msg-check', () => {
       // Mock dependencies and force desired code path
       sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
-      // Prevent wallet from making a network call.
-      uut.walletUtil.advancedConfig.noUpdate = true
-
       // Mock the memo library
       class Memo {
         async readMsgSignal (cashAddress) {
@@ -141,12 +138,9 @@ describe('msg-check', () => {
       assert.isFalse(result)
     })
 
-    it('should check messages.', async () => {
+    it('should check messages', async () => {
       // Mock dependencies and force desired code path
       sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
-
-      // Prevent wallet from making a network call.
-      uut.walletUtil.advancedConfig.noUpdate = true
 
       // Mock the memo library
       class Memo {
@@ -191,9 +185,6 @@ describe('msg-check', () => {
     it('should run the run() function', async () => {
       // Mock dependencies and force desired code path
       sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
-
-      // Prevent wallet from making a network call.
-      uut.walletUtil.advancedConfig.noUpdate = true
 
       // Mock the memo library
       class Memo {

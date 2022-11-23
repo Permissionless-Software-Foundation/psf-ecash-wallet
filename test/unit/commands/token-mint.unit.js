@@ -10,15 +10,15 @@ const fs = require('fs').promises
 // Local libraries
 const TokenMint = require('../../../src/commands/token-mint')
 const WalletCreate = require('../../../src/commands/wallet-create')
-// const MockWallet = require('../../mocks/msw-mock')
+const MockWallet = require('../../mocks/msw-mock')
 
 const walletCreate = new WalletCreate()
 const filename = `${__dirname.toString()}/../../../.wallets/test123.json`
 
-describe('#token-create-fungible', () => {
+describe('#token-mint', () => {
   let uut
   let sandbox
-  // let mockWallet
+  let mockWallet
 
   before(async () => {
     await walletCreate.createWallet(filename)
@@ -28,7 +28,7 @@ describe('#token-create-fungible', () => {
     sandbox = sinon.createSandbox()
 
     uut = new TokenMint()
-    // mockWallet = new MockWallet()
+    mockWallet = new MockWallet()
   })
 
   afterEach(() => {
@@ -97,6 +97,9 @@ describe('#token-create-fungible', () => {
 
   describe('#openWallet', () => {
     it('should return an instance of the wallet', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       const flags = {
         name: 'test123'
       }
@@ -104,7 +107,7 @@ describe('#token-create-fungible', () => {
       const result = await uut.openWallet(flags)
       // console.log('result: ', result)
 
-      assert.property(result, 'advancedOptions')
+      assert.property(result, 'walletInfoPromise')
     })
   })
 
@@ -128,6 +131,9 @@ describe('#token-create-fungible', () => {
         qty: 1,
         tokenId: '227354c9827f4e3c9ce24dd9197b314f7da8a2224f4874ca11104c8fdc58f684'
       }
+
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
       // Instantiate the wallet and bch-js
       await uut.openWallet(flags)
@@ -167,6 +173,9 @@ describe('#token-create-fungible', () => {
           tokenId: '227354c9827f4e3c9ce24dd9197b314f7da8a2224f4874ca11104c8fdc58f684'
         }
 
+        // Mock dependencies and force desired code path
+        sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
         // Instantiate the wallet and bch-js
         await uut.openWallet(flags)
 
@@ -188,6 +197,9 @@ describe('#token-create-fungible', () => {
           qty: 1,
           tokenId: '227354c9827f4e3c9ce24dd9197b314f7da8a2224f4874ca11104c8fdc58f684'
         }
+
+        // Mock dependencies and force desired code path
+        sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
         // Instantiate the wallet and bch-js
         await uut.openWallet(flags)
@@ -243,6 +255,9 @@ describe('#token-create-fungible', () => {
         tokenId: '227354c9827f4e3c9ce24dd9197b314f7da8a2224f4874ca11104c8fdc58f684'
       }
 
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       // Instantiate the wallet and bch-js
       await uut.openWallet(flags)
 
@@ -293,6 +308,9 @@ describe('#token-create-fungible', () => {
         tokenId: '227354c9827f4e3c9ce24dd9197b314f7da8a2224f4874ca11104c8fdc58f684',
         receiver: 'null'
       }
+
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
 
       // Instantiate the wallet and bch-js
       await uut.openWallet(flags)
@@ -345,6 +363,9 @@ describe('#token-create-fungible', () => {
         receiver: 'bitcoincash:qr2u4f2dmva6yvf3npkd5lquryp09qk7gs5vxl423h'
       }
 
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       // Instantiate the wallet and bch-js
       await uut.openWallet(flags)
 
@@ -386,7 +407,8 @@ describe('#token-create-fungible', () => {
     })
 
     it('should return true on successful execution', async () => {
-      // Mock dependencies
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
       sandbox.stub(uut, 'parse').returns({
         flags: {
           name: 'test123',

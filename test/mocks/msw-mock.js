@@ -130,6 +130,14 @@ class BchWallet {
   async getTxData () {
     return true
   }
+
+  async burnAll () {
+    return true
+  }
+
+  async burnTokens () {
+    return true
+  }
 }
 
 module.exports = BchWallet

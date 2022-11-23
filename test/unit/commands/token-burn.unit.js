@@ -10,7 +10,7 @@ const fs = require('fs').promises
 // Local libraries
 const TokenBurn = require('../../../src/commands/token-burn')
 const WalletCreate = require('../../../src/commands/wallet-create')
-// const MockWallet = require('../../mocks/msw-mock')
+const MockWallet = require('../../mocks/msw-mock')
 
 const walletCreate = new WalletCreate()
 const filename = `${__dirname.toString()}/../../../.wallets/test123.json`
@@ -18,7 +18,7 @@ const filename = `${__dirname.toString()}/../../../.wallets/test123.json`
 describe('#token-burn', () => {
   let uut
   let sandbox
-  // let mockWallet
+  let mockWallet
 
   before(async () => {
     await walletCreate.createWallet(filename)
@@ -28,7 +28,7 @@ describe('#token-burn', () => {
     sandbox = sinon.createSandbox()
 
     uut = new TokenBurn()
-    // mockWallet = new MockWallet()
+    mockWallet = new MockWallet()
   })
 
   afterEach(() => {
@@ -97,6 +97,9 @@ describe('#token-burn', () => {
 
   describe('#openWallet', () => {
     it('should return an instance of the wallet', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       const flags = {
         name: 'test123'
       }
@@ -104,12 +107,15 @@ describe('#token-burn', () => {
       const result = await uut.openWallet(flags)
       // console.log('result: ', result)
 
-      assert.property(result, 'advancedOptions')
+      assert.property(result, 'walletInfoPromise')
     })
   })
 
   describe('#tokenBurn', () => {
     it('should burn all if qty is 0', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       const flags = {
         name: 'test123',
         qty: 0
@@ -126,6 +132,9 @@ describe('#token-burn', () => {
     })
 
     it('should burn specified quantity of tokens', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       const flags = {
         name: 'test123',
         qty: 1
@@ -163,7 +172,8 @@ describe('#token-burn', () => {
     })
 
     it('should return true on successful execution', async () => {
-      // Mock dependencies
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
       sandbox.stub(uut, 'parse').returns({
         flags: {
           name: 'test123',

@@ -1,8 +1,10 @@
 /* Unit tests for the msg-read command. */
 
+// Global npm libraries
 const assert = require('chai').assert
 const sinon = require('sinon')
 
+// Local libraries
 const MsgRead = require('../../../src/commands/msg-read')
 const msgReadMock = require('../../mocks/msg-read-mock')
 const filename = `${__dirname.toString()}/../../../.wallets/test123.json`
@@ -91,6 +93,9 @@ describe('msg-read', () => {
 
   describe('#getHashFromTx()', () => {
     it('should throw an error if txData is not provided.', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       try {
         await uut.getHashFromTx()
         assert.fail('Unexpected result')

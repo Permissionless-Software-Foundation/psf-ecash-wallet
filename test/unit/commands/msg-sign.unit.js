@@ -120,6 +120,9 @@ describe('#msg-sign', () => {
 
     it('should return true on successful execution', async () => {
       // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
+      // Mock dependencies
       sandbox.stub(uut, 'parse').returns({
         flags: {
           name: 'test123',
