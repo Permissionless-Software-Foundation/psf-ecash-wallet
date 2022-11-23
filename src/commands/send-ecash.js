@@ -100,7 +100,7 @@ class SendBch extends Command {
     const qty = flags.qty
     if (isNaN(Number(qty))) {
       throw new TypeError(
-        'You must specify a quantity in BCH with the -q flag.'
+        'You must specify a quantity in Bitcoin with the -q flag.'
       )
     }
 
@@ -113,11 +113,16 @@ class SendBch extends Command {
   }
 }
 
-SendBch.description = 'Send BCH'
+SendBch.description = `Send eCash
+
+Send eCash to an address. Quantity is denominated in Bitcoin.
+1 Bitcoin = 1,000,000.00 XEC
+0.001 Bitcoin = 1,000 XEC
+`
 
 SendBch.flags = {
   name: flags.string({ char: 'n', description: 'Name of wallet' }),
-  qty: flags.string({ char: 'q', description: 'Quantity in BCH' }),
+  qty: flags.string({ char: 'q', description: 'Quantity in Bitcoin' }),
   sendAddr: flags.string({ char: 'a', description: 'Cash address to send to' })
 }
 

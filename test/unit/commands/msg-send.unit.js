@@ -10,10 +10,12 @@ const MsgSendMock = require('../../mocks/msg-send-mock')
 const filename = `${__dirname.toString()}/../../../.wallets/test123.json`
 const WalletCreate = require('../../../src/commands/wallet-create')
 const walletCreate = new WalletCreate()
+const MockWallet = require('../../mocks/msw-mock')
 
 describe('msg-send', () => {
   let uut
   let sandbox
+  let mockWallet
 
   before(async () => {
     await walletCreate.createWallet(filename)
@@ -24,6 +26,7 @@ describe('msg-send', () => {
 
     uut = new MsgSend()
     uut.Write = MsgSendMock.Write
+    mockWallet = new MockWallet()
   })
 
   afterEach(() => {
@@ -224,6 +227,9 @@ describe('msg-send', () => {
 
   describe('#instanceLibs', () => {
     it('should instantiate the different libraries', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       const flags = {
         bchAddress: 'bitcoincash:qpufm97hppty67chexq4p53vc29mzg437vwp7huaa3',
         message: 'test message',
@@ -239,6 +245,9 @@ describe('msg-send', () => {
 
   describe('#encryptAndUpload', () => {
     it('should encrypt the message and upload it to the P2WDB', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       const flags = {
         bchAddress: 'bitcoincash:qpufm97hppty67chexq4p53vc29mzg437vwp7huaa3',
         message: 'test message',
@@ -265,6 +274,9 @@ describe('msg-send', () => {
 
   describe('#sendMsgSignal', () => {
     it('should generate a PS001 message and broadcast it', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       const flags = {
         bchAddress: 'bitcoincash:qpufm97hppty67chexq4p53vc29mzg437vwp7huaa3',
         message: 'test message',

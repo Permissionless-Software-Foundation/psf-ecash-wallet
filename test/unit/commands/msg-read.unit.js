@@ -1,17 +1,21 @@
 /* Unit tests for the msg-read command. */
 
+// Global npm libraries
 const assert = require('chai').assert
 const sinon = require('sinon')
 
+// Local libraries
 const MsgRead = require('../../../src/commands/msg-read')
 const msgReadMock = require('../../mocks/msg-read-mock')
 const filename = `${__dirname.toString()}/../../../.wallets/test123.json`
 const WalletCreate = require('../../../src/commands/wallet-create')
 const walletCreate = new WalletCreate()
+const MockWallet = require('../../mocks/msw-mock')
 
 describe('msg-read', () => {
   let uut
   let sandbox
+  let mockWallet
 
   before(async () => {
     await walletCreate.createWallet(filename)
@@ -22,6 +26,7 @@ describe('msg-read', () => {
 
     uut = new MsgRead()
     uut.Read = msgReadMock.Read
+    mockWallet = new MockWallet()
   })
 
   afterEach(() => {
@@ -70,6 +75,9 @@ describe('msg-read', () => {
 
   describe('#instanceLibs', () => {
     it('should instantiate the different libraries', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       const flags = {
         bchAddress: 'bitcoincash:qpufm97hppty67chexq4p53vc29mzg437vwp7huaa3',
         message: 'test message',
@@ -85,6 +93,9 @@ describe('msg-read', () => {
 
   describe('#getHashFromTx()', () => {
     it('should throw an error if txData is not provided.', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       try {
         await uut.getHashFromTx()
         assert.fail('Unexpected result')
@@ -99,6 +110,9 @@ describe('msg-read', () => {
 
     it('should throw an error if ipfs hash not found.', async () => {
       try {
+        // Mock dependencies and force desired code path
+        sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
         const flags = {
           name: 'test123',
           txid: 'fake-txid'
@@ -119,6 +133,9 @@ describe('msg-read', () => {
     })
 
     it('should return hash from tx', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       const flags = {
         name: 'test123',
         txid: 'fake-txid'
@@ -133,6 +150,9 @@ describe('msg-read', () => {
 
   describe('#getAndDecrypt', () => {
     it('should download and decrypt a message from the P2WDB', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       const flags = {
         name: 'test123',
         txid: 'fake-txid'
@@ -171,6 +191,9 @@ describe('msg-read', () => {
     })
 
     it('should read message.', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.walletUtil, 'instanceWallet').resolves(mockWallet)
+
       const flags = {
         txid:
           '36639f7c52ad385a2feeeed08240d92ebb05d7f8aa8a1e8531857bf7a9dc5948',

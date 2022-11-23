@@ -25,11 +25,11 @@
     "koa": "2.13.4",
     "koa-bodyparser": "4.3.0",
     "koa-router": "10.1.1",
-    "minimal-ecash-wallet": "1.1.0",
+    "minimal-ecash-wallet": "1.1.6",
     "p2wdb": "2.2.7",
     "semver": "7.3.5",
     "shelljs": "0.8.4",
-    "slp-mutable-data": "2.2.7",
+    "slp-mutable-data": "2.3.0",
     "uuid": "8.3.2"
   },
   "devDependencies": {

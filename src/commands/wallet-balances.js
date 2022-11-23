@@ -126,7 +126,7 @@ class WalletBalances extends Command {
     try {
       // const coinBalance = walletData.bchjs.BitcoinCash.toBitcoinCash(bchBalance)
       console.log(
-        `BCH balance: ${walletData.satBalance} satoshis or ${walletData.bchBalance} BCH`
+        `BCH balance: ${walletData.satBalance} satoshis or ${walletData.bchBalance} Bitcoin`
       )
 
       walletData.eCashBalance = walletData.satBalance / 100

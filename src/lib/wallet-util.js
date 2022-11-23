@@ -105,16 +105,17 @@ class WalletUtil {
         restURL: this.conf.get('restURL', false),
         interface: this.conf.get('interface', false)
       }
+      // console.log('outObj: ', outObj)
 
       if (!outObj.restURL) {
-        outObj.restURL = 'https://abc.fullstack.cash/v5/'
+        outObj.restURL = 'http://wa-usa-xec-consumer.fullstackcash.nl'
 
         this.conf.set('restURL', outObj.restURL)
       }
 
       if (!outObj.interface) {
-        // outObj.interface = 'consumer-api'
-        outObj.interface = 'rest-api'
+        outObj.interface = 'consumer-api'
+        // outObj.interface = 'rest-api'
 
         this.conf.set('interface', outObj.interface)
       }
@@ -162,8 +163,8 @@ class WalletUtil {
 
       // Get the currently selected REST server from the config.
       const server = this.getRestServer()
-      console.log(`restURL: ${server.restURL}`)
-      console.log(`interface: ${server.interface}`)
+      // console.log(`restURL: ${server.restURL}`)
+      // console.log(`interface: ${server.interface}`)
 
       // Hook for unit tests, to disable network calls.
       if (walletName === 'test123') {
@@ -172,6 +173,7 @@ class WalletUtil {
 
       // Configure the minimal-ecash-wallet library.
       this.advancedConfig.restURL = server.restURL
+      this.advancedConfig.interface = server.interface
       const bchWallet = new this.BchWallet(
         walletData.mnemonic,
         this.advancedConfig
@@ -180,6 +182,7 @@ class WalletUtil {
       // Wait for the wallet to initialize and retrieve UTXO data from the
       // blockchain.
       await bchWallet.walletInfoPromise
+      await bchWallet.initialize()
 
       return bchWallet
     } catch (err) {

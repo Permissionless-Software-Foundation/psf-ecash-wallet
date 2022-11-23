@@ -125,7 +125,7 @@ describe('send-ecash', () => {
       } catch (err) {
         assert.include(
           err.message,
-          'You must specify a quantity in BCH with the -q flag.',
+          'You must specify a quantity in Bitcoin with the -q flag.',
           'Expected error message.'
         )
       }
