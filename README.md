@@ -6,6 +6,11 @@ This app is forked from [psf-bch-wallet](https://github.com/Permissionless-Softw
 
 If you need help or guidence while using this software, reach out to the [Community Support Telegram Channel](https://t.me/bch_js_toolkit).
 
+## How-To Videos
+- [Part 1: How to Install and Use](https://www.youtube.com/watch?v=nsExL0Hb7bQ)
+- [Part 2: Configuration](https://www.youtube.com/watch?v=Bu8KqUJSvvc)
+- [Creating NFTs and tokens](https://youtu.be/KWgGS5zN0Ys)
+
 ## Install
 
 - `git clone` this repository.

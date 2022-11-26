@@ -99,10 +99,14 @@ class P2WDBJson extends Command {
       // Get the REST URL
       const server = this.walletUtil.getRestServer()
 
+      // TODO: Create a walletUtil.getPinService() method to replace the
+      // hard-coded URL below.
+
       // Instantiate the Write library.
       this.pin = new this.Pin({
         bchWallet: this.wallet,
         serverURL: p2wdbServer,
+        pinServer: 'https://xec-p2wdb-pin.fullstack.cash',
         interface: server.interface,
         restURL: server.restURL
       })
@@ -117,6 +121,9 @@ class P2WDBJson extends Command {
   // Instantiate the p2wdb Write library and write the data to the P2WDB.
   async pinJson (flags) {
     try {
+      // Get the P2WDB server.
+      const p2wdbServer = this.walletUtil.getP2wdbServer()
+
       // Parse the JSON string into an object.
       const jsonData = JSON.parse(flags.json)
 
@@ -126,7 +133,7 @@ class P2WDBJson extends Command {
       const result1 = await this.write.postEntry(jsonData, appId)
       const zcid1 = result1.hash
       console.log(`Data added to P2WDB with this zcid: ${zcid1}`)
-      console.log(`https://p2wdb.fullstack.cash/entry/hash/${zcid1}\n`)
+      console.log(`${p2wdbServer}/entry/hash/${zcid1}\n`)
 
       // Request the P2WDB Pinning Service extract the data and pin it separately
       // as an IPFS CID (which starts with 'bafy').
@@ -137,7 +144,7 @@ class P2WDBJson extends Command {
       const result2 = await this.pin.cid(cid)
       const zcid2 = result2.hash
       console.log('Data pinned across the P2WDB Pinning Cluster.')
-      console.log(`https://p2wdb.fullstack.cash/entry/hash/${zcid2}\n`)
+      console.log(`${p2wdbServer}/entry/hash/${zcid2}\n`)
 
       return cid
     } catch (err) {
