@@ -88,7 +88,12 @@ class TokenUpdate extends Command {
   async instantiateSlpData (flags) {
     try {
       // Instantiate the wallet.
-      this.wallet = await this.walletUtil.instanceWallet(flags.name)
+      if (flags.name) {
+        this.wallet = await this.walletUtil.instanceWallet(flags.name)
+      } else {
+        this.wallet = await this.walletUtil.instanceWalletWithKey(flags.key)
+      }
+
       // console.log(`wallet.walletInfo: ${JSON.stringify(wallet.walletInfo, null, 2)}`)
 
       this.slpMutableData = new this.SlpMutableData({ wallet: this.wallet })
@@ -104,8 +109,11 @@ class TokenUpdate extends Command {
   validateFlags (flags) {
     // Exit if wallet not specified.
     const name = flags.name
+    const key = flags.key
     if (!name || name === '') {
-      throw new Error('You must specify a wallet with the -n flag.')
+      if (!key || key === '') {
+        throw new Error('You must specify a wallet with the -n flag or a private key with the -p flag.')
+      }
     }
 
     const cid = flags.cid
@@ -146,6 +154,11 @@ TokenUpdate.flags = {
   cid: flags.string({
     char: 'c',
     description: 'A CID that resolves to the new mutable data JSON'
+  }),
+
+  key: flags.string({
+    char: 'p',
+    description: 'private key (optional) can be used in place of a wallet name.'
   })
 }
 
