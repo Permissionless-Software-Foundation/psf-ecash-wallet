@@ -54,7 +54,7 @@ class TokenUpdate extends Command {
       const txid = await this.walletUtil.broadcastTx(this.wallet, hex)
 
       console.log(`Mutable data updated with TXID: ${txid}`)
-      console.log(`https://blockchair.com/ecash/transaction/${txid}`)
+      console.log(`https://explorer.be.cash/tx/${txid}`)
 
       return txid
     } catch (err) {
