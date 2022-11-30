@@ -110,6 +110,11 @@ class TokenMdaTx extends Command {
       // Add the OP_RETURN output.
       transactionBuilder.addOutput(data, 0)
 
+      // If the MDA is an ecash address, convert the ecash address to a bch address.
+      if (flags.mda.includes('ecash:')) {
+        flags.mda = this.bchjs.Address.ecashtoCashAddress(flags.mda)
+      }
+
       // Send dust to the MSP address to cryptographically link it to this TX.
       transactionBuilder.addOutput(flags.mda, dust)
 

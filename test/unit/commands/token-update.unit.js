@@ -54,7 +54,7 @@ describe('#token-update', () => {
       } catch (err) {
         assert.include(
           err.message,
-          'You must specify a wallet with the -n flag.',
+          'You must specify a wallet with the -n flag or a private key with the -p flag.',
           'Expected error message.'
         )
       }

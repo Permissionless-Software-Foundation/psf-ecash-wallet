@@ -191,6 +191,50 @@ class WalletUtil {
     }
   }
 
+  // Instantiates the wallet using a private key.
+  async instanceWalletWithKey (wif) {
+    try {
+      // Input validation
+      if (!wif || typeof wif !== 'string') {
+        throw new Error('WIF private key is required.')
+      }
+
+      // const filePath = `${__dirname.toString()}/../../.wallets/${walletName}.json`
+
+      // Load the wallet file.
+      // const walletJSON = require(filePath)
+      // const walletData = walletJSON.wallet
+
+      // Get the currently selected REST server from the config.
+      const server = this.getRestServer()
+      // console.log(`restURL: ${server.restURL}`)
+      // console.log(`interface: ${server.interface}`)
+
+      // Hook for unit tests, to disable network calls.
+      // if (walletName === 'test123') {
+      //   this.advancedConfig.noUpdate = true
+      // }
+
+      // Configure the minimal-ecash-wallet library.
+      this.advancedConfig.restURL = server.restURL
+      this.advancedConfig.interface = server.interface
+      const bchWallet = new this.BchWallet(
+        wif,
+        this.advancedConfig
+      )
+
+      // Wait for the wallet to initialize and retrieve UTXO data from the
+      // blockchain.
+      // await bchWallet.walletInfoPromise
+      await bchWallet.initialize()
+
+      return bchWallet
+    } catch (err) {
+      console.error('Error in wallet-util.js/instanceWallet()')
+      throw err
+    }
+  }
+
   // Instantiate the bch-message-lib library with an instance of minimal-ecash-wallet.
   instanceMsgLib (wallet) {
     if (!wallet) {
